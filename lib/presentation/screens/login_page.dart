@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:Sebawi/data/provider/auth_provider.dart';
+import 'package:Sebawi/data/provider/form_provider.dart';
+import 'package:Sebawi/data/provider/data_provider.dart';
 
-class LoginPage extends StatefulWidget {
+
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final PageController _pageController = PageController();
   final List<Widget> imageSliders = [
     Image.asset("assets/images/11.jpg", fit: BoxFit.cover),
@@ -52,6 +57,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final email = ref.watch(emailProvider);
+    final password = ref.watch(passwordProvider);
+    final isAuthenticated = ref.watch(authProvider);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -75,6 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: 300,
                   child: ElevatedButton(
                     onPressed: () {
+                      signIn(ref);
                       context.go('/admin_login');
                     },
                     style: ElevatedButton.styleFrom(
@@ -97,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: 300,
                   child: ElevatedButton(
                     onPressed: () {
+                      signIn(ref);
                       context.go('/user_login');
                     },
                     style: ElevatedButton.styleFrom(

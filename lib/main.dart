@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; 
+import 'package:go_router/go_router.dart';
 import 'package:Sebawi/presentation/screens/admin_login.dart';
 import 'package:Sebawi/presentation/screens/admin_page.dart';
 import 'package:Sebawi/presentation/screens/agency_home.dart';
@@ -8,10 +11,10 @@ import 'package:Sebawi/presentation/screens/login_user.dart';
 import 'package:Sebawi/presentation/screens/signup_page.dart';
 import 'package:Sebawi/presentation/screens/user_update.dart';
 import 'package:Sebawi/presentation/screens/volunteer-signup.dart';
-import 'package:flutter/material.dart';
 import 'package:Sebawi/presentation/screens/home_page.dart';
 import 'package:Sebawi/presentation/screens/user_home.dart';
-import 'package:go_router/go_router.dart';
+import 'package:Sebawi/data/provider/volunteer_signup_provider.dart';
+import 'package:Sebawi/data/provider/agency_signup_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -58,17 +61,34 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/volunteer_signup',
       name: "volunteer_signup",
-      builder: (context, state) => VolunteerSignup(),
+      builder: (context, state) => Consumer(
+        builder: (context, watch, child) {
+          final value = watch(volunteerSignupProvider);
+          if (value is AsyncData<bool> && value.data == true) {
+            context.go('/volunteer_success');
+          }
+          return const VolunteerSignup();
+        },
+      ),
     ),
     GoRoute(
       path: '/agency_signup',
       name: "agency_signup",
-      builder: (context, state) => const AgencySignup(),
+      builder: (context, state) => Consumer(
+        builder: (context, watch, child) {
+          final value = watch(agencySignupProvider);
+          if (value is AsyncData<bool> && value.data == true) {
+            context.go('/agency_success');
+          }
+          return const AgencySignup();
+        },
+      ),
     ),
     GoRoute(
-        path: '/agency_home',
-        name: "agency_home",
-        builder: (context, state) => const AgencyHomePage()),
+      path: '/agency_home',
+      name: "agency_home",
+      builder: (context, state) => const AgencyHomePage(),
+    ),
     GoRoute(
       path: '/user_update',
       name: "user_update",
@@ -93,11 +113,12 @@ final GoRouter _router = GoRouter(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Center(
-                child: Text(
-              'Error: ${state.error}',
-              style: const TextStyle(fontSize: 20),
-              textAlign: TextAlign.center,
-            )),
+              child: Text(
+                'Error: ${state.error}',
+                style: const TextStyle(fontSize: 20),
+                textAlign: TextAlign.center,
+              ),
+            ),
             ElevatedButton(
               onPressed: () {
                 context.go('/');
@@ -115,9 +136,8 @@ final GoRouter _router = GoRouter(
 );
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -153,7 +173,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      routerConfig: _router,
+      routerDelegate: _router.routerDelegate,
+      routeInformationParser: _router.routeInformationParser,
     );
   }
 }
