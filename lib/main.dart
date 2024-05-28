@@ -13,8 +13,6 @@ import 'package:Sebawi/presentation/screens/user_update.dart';
 import 'package:Sebawi/presentation/screens/volunteer-signup.dart';
 import 'package:Sebawi/presentation/screens/home_page.dart';
 import 'package:Sebawi/presentation/screens/user_home.dart';
-import 'package:Sebawi/data/provider/volunteer_signup_provider.dart';
-import 'package:Sebawi/data/provider/agency_signup_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -61,28 +59,12 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/volunteer_signup',
       name: "volunteer_signup",
-      builder: (context, state) => Consumer(
-        builder: (context, watch, child) {
-          final value = watch(volunteerSignupProvider);
-          if (value is AsyncData<bool> && value.data == true) {
-            context.go('/volunteer_success');
-          }
-          return const VolunteerSignup();
-        },
-      ),
+      builder: (context, state) => VolunteerSignup(),
     ),
     GoRoute(
       path: '/agency_signup',
       name: "agency_signup",
-      builder: (context, state) => Consumer(
-        builder: (context, watch, child) {
-          final value = watch(agencySignupProvider);
-          if (value is AsyncData<bool> && value.data == true) {
-            context.go('/agency_success');
-          }
-          return const AgencySignup();
-        },
-      ),
+      builder: (context, state) => const AgencySignup(),
     ),
     GoRoute(
       path: '/agency_home',
