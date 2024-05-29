@@ -1,13 +1,18 @@
 import 'package:Sebawi/presentation/widgets/custom_button.dart';
 import 'package:Sebawi/presentation/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class VolunteerSignup extends StatelessWidget {
-  const VolunteerSignup({super.key});
+import '../../application/providers/volunteer_signup_provider.dart'; // Import your VolunteerSignupNotifier
+
+class VolunteerSignup extends ConsumerWidget {
+  const VolunteerSignup({Key? key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final signupNotifier = ref.watch(volunteerSignupProvider);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -24,8 +29,8 @@ class VolunteerSignup extends StatelessWidget {
                     height: 140.0,
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 35),
+                Padding(
+                  padding: const EdgeInsets.only(left: 35),
                   child: Text(
                     'Sign Up',
                     style: TextStyle(
@@ -34,11 +39,9 @@ class VolunteerSignup extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                const SizedBox(
-                  height: 2.0,
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 35.0),
+                SizedBox(height: 2.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -51,62 +54,59 @@ class VolunteerSignup extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 8.0),
-                const CustomTextFormField(
+                SizedBox(height: 8.0),
+                CustomTextFormField(
+                  onChanged: signupNotifier.setFullName,
                   labelText: 'Full name',
-                  obscureText: true,
                 ),
-                const SizedBox(height: 10.0),
-                const CustomTextFormField(
+                SizedBox(height: 10.0),
+                CustomTextFormField(
+                  onChanged: signupNotifier.setEmail,
                   labelText: 'Enter Email',
-                  obscureText: true,
                 ),
-                const SizedBox(height: 10.0),
-                const CustomTextFormField(
+                SizedBox(height: 10.0),
+                CustomTextFormField(
+                  onChanged: signupNotifier.setUsername,
                   labelText: 'Create Username',
-                  obscureText: true,
                 ),
-                const SizedBox(height: 10.0),
-                const CustomTextFormField(
+                SizedBox(height: 10.0),
+                CustomTextFormField(
+                  onChanged: signupNotifier.setPassword,
                   labelText: 'Create Password',
-                  obscureText: true,
                 ),
-                const SizedBox(height: 10.0),
-                const CustomTextFormField(
+                SizedBox(height: 10.0),
+                CustomTextFormField(
+                  onChanged: signupNotifier.setConfirmPassword,
                   labelText: 'Confirm Password',
-                  obscureText: true,
                 ),
-                const SizedBox(height: 40.0),
+                SizedBox(height: 40.0),
                 CustomButton(
-                    buttonText: 'Sign up',
+                    buttonText: 'Signup',
                     buttonColor: const Color.fromARGB(255, 83, 171, 71),
                     buttonTextColor: Colors.white,
-                    buttonAction: () {
-                      context.go('/user_home');
-                    }),
+                    buttonAction: () => signupNotifier.signUp(context)),
                 Padding(
                   padding: const EdgeInsets.all(17),
                   child: Center(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text('Already signed up?'),
-                        TextButton(
-                          onPressed: () {
+                        const Padding(
+                          padding: EdgeInsets.only(right: 4.0),
+                          child: Text('Already signed up?'),
+                        ),
+                        GestureDetector(
+                          onTap: () {
                             context.go('/user_login');
                           },
-                          style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all<Color>(
-                                const Color.fromARGB(255, 66, 148, 69)),
-                            textStyle: MaterialStateProperty.all<TextStyle>(
-                              const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 66, 148, 69),
                             ),
                           ),
-                          child: const Text('Log In'),
-                        ),
+                        )
                       ],
                     ),
                   ),
