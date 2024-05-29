@@ -1,17 +1,20 @@
-import 'package:Sebawi/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:Sebawi/presentation/widgets/custom_button.dart';
+import 'package:Sebawi/application/providers/profile_update_provider.dart';  
 
-class ProfileUpdateForm extends StatefulWidget {
+class ProfileUpdateForm extends ConsumerStatefulWidget {
   @override
   _ProfileUpdateFormState createState() => _ProfileUpdateFormState();
 }
 
-class _ProfileUpdateFormState extends State<ProfileUpdateForm> {
+class _ProfileUpdateFormState extends ConsumerState<ProfileUpdateForm> {
   final _formKey = GlobalKey<FormState>();
-  String _username = '';
-  String _password = '';
-  String _email = '';
   String _name = '';
+  String _username = '';
+  String _email = '';
+  String _password = '';
+  String _confirmPassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -30,18 +33,17 @@ class _ProfileUpdateFormState extends State<ProfileUpdateForm> {
                 ),
               ),
             ),
-            onSaved: (value) => _username = value!,
+            onSaved: (value) => _name = value!,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your Name';
+                return 'Please enter your name';
               }
               return null;
             },
           ),
           TextFormField(
             decoration: InputDecoration(labelText: 'Username'),
-            obscureText: true,
-            onSaved: (value) => _password = value!,
+            onSaved: (value) => _username = value!,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter your username';
@@ -65,7 +67,8 @@ class _ProfileUpdateFormState extends State<ProfileUpdateForm> {
           ),
           TextFormField(
             decoration: InputDecoration(labelText: 'Password'),
-            onSaved: (value) => _name = value!,
+            obscureText: true,
+            onSaved: (value) => _password = value!,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter your password';
@@ -73,24 +76,44 @@ class _ProfileUpdateFormState extends State<ProfileUpdateForm> {
               return null;
             },
           ),
+          TextFormField(
+            decoration: InputDecoration(labelText: 'Confirm Password'),
+            obscureText: true,
+            onSaved: (value) => _confirmPassword = value!,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please confirm your password';
+              }
+              if (value != _password) {
+                return 'Passwords do not match';
+              }
+              return null;
+            },
+          ),
           SizedBox(height: 20),
           CustomButton(
-              buttonText: 'Update Profile',
-              buttonColor: Colors.green,
-              buttonTextColor: Colors.white,
-              buttonAction: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  // Save form data to server or database
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Profile updated')),
-                  );
-                }
-              }),
-          SizedBox(height: 200),
+            buttonText: 'Update Profile',
+            buttonColor: Colors.green,
+            buttonTextColor: Colors.white,
+            buttonAction: () {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
+                ref.read(profileProvider.notifier).updateProfile(
+                  username: _username,
+                  password: _password,
+                  email: _email,
+                  name: _name,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Profile updated')),
+                );
+              }
+            },
+          ),
+          SizedBox(height: 20),
           TextButton(
             onPressed: () {
-              // Add delete account logic
+              ref.read(profileProvider.notifier).deleteAccount();
             },
             style: TextButton.styleFrom(
               foregroundColor: Colors.red, // Text color

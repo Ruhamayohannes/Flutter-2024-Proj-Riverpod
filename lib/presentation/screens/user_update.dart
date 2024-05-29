@@ -1,5 +1,5 @@
-import 'package:Sebawi/presentation/widgets/profile_update_form.dart';
 import 'package:flutter/material.dart';
+import 'package:Sebawi/presentation/widgets/profile_update_form.dart';
 
 class UserUpdate extends StatelessWidget {
   const UserUpdate({super.key});
@@ -8,7 +8,7 @@ class UserUpdate extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Update Profile'),
+        title: Text('Update User Profile'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -17,7 +17,3 @@ class UserUpdate extends StatelessWidget {
     );
   }
 }
-
-
-
-
