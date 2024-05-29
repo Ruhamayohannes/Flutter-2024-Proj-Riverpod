@@ -39,7 +39,7 @@ class AdminLoginPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Login'),
-        backgroundColor: Colors.lightGreen.withOpacity(0.5),
+        backgroundColor: Colors.green[800],
       ),
       body: Center(
         child: Padding(

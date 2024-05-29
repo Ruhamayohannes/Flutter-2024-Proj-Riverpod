@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -40,10 +41,33 @@ class _AdminPageState extends State<AdminPage>
         ),
         backgroundColor: Color.fromARGB(255, 51, 114, 53),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {},
-          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0, right: 16.0),
+            child: PopupMenuButton<String>(
+              onSelected: (value) {
+                if (value == 'logout') {
+                  context.go('/login');
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem<String>(
+                    value: 'logout',
+                    child: Row(
+                      children: [
+                        Icon(Icons.logout, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text('Logout'),
+                      ],
+                    ),
+                  ),
+                ];
+              },
+              icon: Icon(Icons.logout),
+              color: Colors.green.shade800,
+              iconSize: 27,
+            ),
+          )
         ],
         bottom: TabBar(
           controller: _tabController,
