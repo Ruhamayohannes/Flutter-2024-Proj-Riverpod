@@ -1,4 +1,4 @@
-package com.example.sebawi
+package com.example.sebawi_app
 
 import io.flutter.embedding.android.FlutterActivity
 

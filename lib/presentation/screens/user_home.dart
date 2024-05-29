@@ -1,16 +1,12 @@
 import 'package:Sebawi/data/services/api_path.dart';
 import 'package:flutter/material.dart';
+
 import '../../data/models/posts.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 
 class UserHomePage extends StatelessWidget {
   const UserHomePage({super.key});
 
-  void initState() {
-    fetchPosts();
-  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,7 +30,7 @@ class UserHomePage extends StatelessWidget {
                   onPressed: () {
                     context.go('/user_update');
                   },
-                  icon: const Icon(Icons.settings),
+                  icon: Icon(Icons.settings),
                   color: Colors.green.shade800,
                   iconSize: 27,
                 ),

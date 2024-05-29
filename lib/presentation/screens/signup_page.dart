@@ -1,41 +1,31 @@
-import 'package:Sebawi/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:Sebawi/data/provider/agency_signup_provider.dart';
-import 'package:Sebawi/data/provider/volunteer_signup_provider.dart';
+import 'package:Sebawi/presentation/widgets/custom_button.dart';
 
+class SignupScreen extends StatelessWidget {
+  const SignupScreen({Key? key}) : super(key: key);
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
-
-  @override
-  State<SignupScreen> createState() => _SignupScreenState();
-}
-
-class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-            leading: IconButton(
-          onPressed: () {
-            context.go('/');
-          },
-          icon: const Icon(Icons.arrow_back),
-        )),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back),
+          ),
+        ),
         body: Container(
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(
-                  height: 2.0,
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                const SizedBox(height: 2.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -45,7 +35,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           Text(
                             'Are you a volunteer or an agency?',
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
@@ -102,7 +94,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   buttonAction: () {
                     context.go('/agency_signup');
                   },
-                )
+                ),
               ],
             ),
           ),

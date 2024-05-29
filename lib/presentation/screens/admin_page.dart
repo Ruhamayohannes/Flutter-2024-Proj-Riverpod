@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:Sebawi/data/provider/users_provider.dart'; // Import for managing users
-import 'package:Sebawi/data/provider/agencies_provider.dart'; // Import for managing agencies
-import 'package:Sebawi/data/provider/posts_provider.dart'; // Import for managing posts
-
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});

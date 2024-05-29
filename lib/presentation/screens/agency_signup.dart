@@ -2,24 +2,9 @@ import 'package:Sebawi/presentation/widgets/custom_button.dart';
 import 'package:Sebawi/presentation/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:Sebawi/data/provider/agency_signup_provider.dart';
-import 'package:Sebawi/data/provider/volunteer_signup_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
-class AgencySignup extends StatefulWidget {
+class AgencySignup extends StatelessWidget {
   const AgencySignup({super.key});
-
-  @override
-  _AgencySignupState createState() => _AgencySignupState();
-}
-
-class _AgencySignupState extends State<AgencySignup> {
-  final TextEditingController _fullNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -67,29 +52,29 @@ class _AgencySignupState extends State<AgencySignup> {
                   ),
                 ),
                 const SizedBox(height: 8.0),
-                 CustomTextFormField(
+                const CustomTextFormField(
                   labelText: 'Agency name',
-                  obscureText: true, controller: _fullNameController,
+                  obscureText: true,
                 ),
                 const SizedBox(height: 10.0),
-                 CustomTextFormField(
+                const CustomTextFormField(
                   labelText: 'Enter Email',
-                  obscureText: true, controller: _emailController,
+                  obscureText: true,
                 ),
                 const SizedBox(height: 10.0),
-                 CustomTextFormField(
+                const CustomTextFormField(
                   labelText: 'Create Username',
-                  obscureText: true, controller: _usernameController,
+                  obscureText: true,
                 ),
                 const SizedBox(height: 10.0),
-                CustomTextFormField(
+                const CustomTextFormField(
                   labelText: 'Create Password',
-                  obscureText: true, controller: _passwordController,
+                  obscureText: true,
                 ),
                 const SizedBox(height: 10.0),
-                 CustomTextFormField(
+                const CustomTextFormField(
                   labelText: 'Confirm Password',
-                  obscureText: true, controller: _confirmPasswordController,
+                  obscureText: true,
                 ),
                 const SizedBox(height: 40.0),
                 CustomButton(
