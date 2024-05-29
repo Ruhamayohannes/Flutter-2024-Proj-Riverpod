@@ -11,10 +11,15 @@ import 'package:Sebawi/presentation/screens/volunteer-signup.dart';
 import 'package:flutter/material.dart';
 import 'package:Sebawi/presentation/screens/home_page.dart';
 import 'package:Sebawi/presentation/screens/user_home.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 final GoRouter _router = GoRouter(
@@ -128,7 +133,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.green,
         ).copyWith(
           secondary: Colors.green[800],
-          surface: Colors.lightGreen.withOpacity(0.5),
+          surface: Color.fromARGB(255, 69, 160, 79),
         ),
         scaffoldBackgroundColor: Colors.white,
         elevatedButtonTheme: ElevatedButtonThemeData(

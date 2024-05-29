@@ -1,20 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:Sebawi/presentation/screens/admin_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../application/providers/login_admin_provider.dart';
 
-class AdminLoginPage extends StatefulWidget {
+class AdminLoginPage extends ConsumerWidget {
   const AdminLoginPage({super.key});
 
   @override
-  _AdminLoginPageState createState() => _AdminLoginPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextEditingController _usernameController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
 
-class _AdminLoginPageState extends State<AdminLoginPage> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+    void _login() {
+      final username = _usernameController.text;
+      final password = _passwordController.text;
+      ref.read(loginProvider.notifier).login(username, password);
+      if (ref.read(loginProvider)) {
+        context.go('/admin_page');
+      } else {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Login Failed'),
+            content: const Text('Invalid username or password.'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Close'),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      }
+    }
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Login'),
@@ -65,28 +86,5 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
         ),
       ),
     );
-  }
-
-  void _login() {
-    if (_usernameController.text == 'admin' &&
-        _passwordController.text == 'password') {
-     context.go('/admin_page');
-    } else {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Login Failed'),
-          content: const Text('Invalid username or password.'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Close'),
-              onPressed: () {
-                context.pop();
-              },
-            ),
-          ],
-        ),
-      );
-    }
   }
 }
