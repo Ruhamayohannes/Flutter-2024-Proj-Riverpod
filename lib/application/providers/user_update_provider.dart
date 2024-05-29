@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileProvider extends ChangeNotifier {
+class UserProvider extends ChangeNotifier {
   String _username = '';
   String _password = '';
   String _email = '';
@@ -26,8 +26,13 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   void deleteAccount() {
+    // Perform account deletion logic here, such as API calls or local data removal
+    _username = '';
+    _password = '';
+    _email = '';
+    _name = '';
     notifyListeners();
   }
 }
 
-final profileProvider = ChangeNotifierProvider((ref) => ProfileProvider());
+final userProvider = ChangeNotifierProvider((ref) => UserProvider());

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:Sebawi/presentation/widgets/custom_button.dart';
-import 'package:Sebawi/application/providers/profile_update_provider.dart';  
+import 'package:Sebawi/application/providers/user_update_provider.dart';
+import 'package:go_router/go_router.dart'; // Import go_router
 
 class ProfileUpdateForm extends ConsumerStatefulWidget {
   @override
@@ -16,11 +17,47 @@ class _ProfileUpdateFormState extends ConsumerState<ProfileUpdateForm> {
   String _password = '';
   String _confirmPassword = '';
 
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Account'),
+          content: Text(
+              'Are you sure you want to delete your account? This action cannot be undone.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                ref.read(userProvider.notifier).deleteAccount();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Account deleted')),
+                );
+                context.go('/login'); // Navigate to login page
+              },
+              child: Text('Delete'),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: ListView(
+        padding: EdgeInsets.all(16),
         children: <Widget>[
           TextFormField(
             decoration: InputDecoration(
@@ -68,6 +105,7 @@ class _ProfileUpdateFormState extends ConsumerState<ProfileUpdateForm> {
           TextFormField(
             decoration: InputDecoration(labelText: 'Password'),
             obscureText: true,
+            onChanged: (value) => _password = value,
             onSaved: (value) => _password = value!,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -79,6 +117,7 @@ class _ProfileUpdateFormState extends ConsumerState<ProfileUpdateForm> {
           TextFormField(
             decoration: InputDecoration(labelText: 'Confirm Password'),
             obscureText: true,
+            onChanged: (value) => _confirmPassword = value,
             onSaved: (value) => _confirmPassword = value!,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -98,12 +137,12 @@ class _ProfileUpdateFormState extends ConsumerState<ProfileUpdateForm> {
             buttonAction: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                ref.read(profileProvider.notifier).updateProfile(
-                  username: _username,
-                  password: _password,
-                  email: _email,
-                  name: _name,
-                );
+                ref.read(userProvider.notifier).updateProfile(
+                      username: _username,
+                      password: _password,
+                      email: _email,
+                      name: _name,
+                    );
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Profile updated')),
                 );
@@ -113,7 +152,7 @@ class _ProfileUpdateFormState extends ConsumerState<ProfileUpdateForm> {
           SizedBox(height: 20),
           TextButton(
             onPressed: () {
-              ref.read(profileProvider.notifier).deleteAccount();
+              _showDeleteConfirmationDialog(context);
             },
             style: TextButton.styleFrom(
               foregroundColor: Colors.red, // Text color

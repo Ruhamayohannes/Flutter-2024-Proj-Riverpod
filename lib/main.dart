@@ -12,7 +12,8 @@ import 'package:Sebawi/presentation/screens/user_update.dart';
 import 'package:Sebawi/presentation/screens/volunteer-signup.dart';
 import 'package:Sebawi/presentation/screens/home_page.dart';
 import 'package:Sebawi/presentation/screens/user_home.dart';
-import 'package:Sebawi/application/providers/profile_update_provider.dart';
+import 'package:Sebawi/application/providers/user_update_provider.dart'; 
+import 'package:Sebawi/application/providers/agency_update_provider.dart'; 
 import 'package:go_router/go_router.dart';
 
 void main() {
@@ -72,9 +73,10 @@ final GoRouter _router = GoRouter(
       builder: (context, state) => const AgencySignup(),
     ),
     GoRoute(
-        path: '/agency_home',
-        name: "agency_home",
-        builder: (context, state) => const AgencyHomePage()),
+      path: '/agency_home',
+      name: "agency_home",
+      builder: (context, state) => const AgencyHomePage(),
+    ),
     GoRoute(
       path: '/user_update',
       name: "user_update",
@@ -123,7 +125,6 @@ final GoRouter _router = GoRouter(
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
