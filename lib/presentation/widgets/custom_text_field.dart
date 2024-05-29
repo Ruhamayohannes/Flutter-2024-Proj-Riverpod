@@ -5,18 +5,22 @@ class CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final String? errorText;
   final void Function(String)? onChanged;
+  final TextEditingController controller;
 
   const CustomTextFormField({
     required this.labelText,
     this.obscureText = false,
     this.errorText,
     this.onChanged,
+    required this.controller,
+
+
   }) ;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 35.0),
+      padding: const EdgeInsets.all(8.0),
       child: TextFormField(
         decoration: InputDecoration(
           contentPadding: EdgeInsets.only(bottom: 4.0),
