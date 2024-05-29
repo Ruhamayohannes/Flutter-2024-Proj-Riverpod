@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:Sebawi/application/providers/admin_provider.dart';
 
-class AdminPage extends StatefulWidget {
+class AdminPage extends ConsumerStatefulWidget {
   const AdminPage({super.key});
 
   @override
   _AdminPageState createState() => _AdminPageState();
 }
 
-class _AdminPageState extends State<AdminPage>
+class _AdminPageState extends ConsumerState<AdminPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final List<Post> _posts = [
-    Post(
-      title: "Event in Central Park",
-      content: "Details about the event...",
-      date: "2024-04-18",
-    ),
-  ];
 
   @override
   void initState() {
@@ -94,81 +89,182 @@ class _AdminPageState extends State<AdminPage>
   }
 
   Widget _buildManageUsersTab() {
-    return Center(
-      child: Text(
-        'Manage Users',
-        style: TextStyle(color: Colors.white, fontSize: 18),
-      ),
-    );
-  }
+    return Consumer(
+      builder: (context, ref, _) {
+        final users = ref.watch(adminProvider).users;
+        final adminNotifier = ref.watch(adminProvider.notifier);
 
-  Widget _buildManageAgenciesTab() {
-    return Center(
-      child: Text(
-        'Manage Agencies',
-        style: TextStyle(color: Colors.white, fontSize: 18),
-      ),
-    );
-  }
-
-  Widget _buildManagePostsTab() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Your Posts',
-            style: Theme.of(context)
-                .textTheme
-                .headlineMedium
-                ?.copyWith(color: Colors.white),
-          ),
-        ),
-        Expanded(
+        return Padding(
+          padding: const EdgeInsets.only(top: 8.0),
           child: ListView.builder(
-            itemCount: _posts.length,
+            itemCount: users.length,
             itemBuilder: (context, index) {
               return Card(
                 color: Colors.green.shade900,
                 child: ListTile(
-                  title: Text(_posts[index].title,
+                  title: Text(users[index].name,
                       style: TextStyle(color: Colors.white)),
-                  subtitle: Text('Posted on ${_posts[index].date}',
+                  subtitle: Text(users[index].email,
                       style: TextStyle(color: Colors.white70)),
-                  isThreeLine: true,
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        color: Colors.white,
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        color: Colors.red,
-                        onPressed: () {
-                          setState(() {
-                            _posts.removeAt(index);
-                          });
-                        },
-                      ),
-                    ],
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    color: Colors.red,
+                    onPressed: () {
+                      adminNotifier.deleteUser(index);
+                    },
                   ),
                 ),
               );
             },
           ),
-        ),
-      ],
+        );
+      },
     );
   }
-}
 
-class Post {
-  String title;
-  String content;
-  String date;
+  Widget _buildManageAgenciesTab() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final agencies = ref.watch(adminProvider).agencies;
+        final adminNotifier = ref.watch(adminProvider.notifier);
 
-  Post({required this.title, required this.content, required this.date});
+        return Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: ListView.builder(
+            itemCount: agencies.length,
+            itemBuilder: (context, index) {
+              return Card(
+                color: Colors.green.shade900,
+                child: ListTile(
+                  title: Text(agencies[index].name,
+                      style: TextStyle(color: Colors.white)),
+                  subtitle: Text(agencies[index].email,
+                      style: TextStyle(color: Colors.white70)),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    color: Colors.red,
+                    onPressed: () {
+                      adminNotifier.deleteAgency(index);
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildManagePostsTab() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final posts = ref.watch(adminProvider).posts;
+        final adminNotifier = ref.watch(adminProvider.notifier);
+
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Text(
+                'Your Posts',
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium
+                    ?.copyWith(color: Colors.white),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 0.0),
+                child: ListView.builder(
+                  itemCount: posts.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      color: Colors.green.shade900,
+                      child: ListTile(
+                        title: Text(posts[index].title,
+                            style: TextStyle(color: Colors.white)),
+                        subtitle: Text('Posted on ${posts[index].date}',
+                            style: TextStyle(color: Colors.white70)),
+                        isThreeLine: true,
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              color: Colors.white,
+                              onPressed: () {
+                                _showEditDialog(context, adminNotifier,
+                                    posts[index], index);
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              color: Colors.red,
+                              onPressed: () {
+                                adminNotifier.deletePost(index);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showEditDialog(
+      BuildContext context, AdminProvider adminNotifier, Post post, int index) {
+    final _titleController = TextEditingController(text: post.title);
+    final _contentController = TextEditingController(text: post.content);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Edit Post'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(labelText: 'Title'),
+              ),
+              TextField(
+                controller: _contentController,
+                decoration: InputDecoration(labelText: 'Content'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                final updatedPost = Post(
+                  title: _titleController.text,
+                  content: _contentController.text,
+                  date: post.date, // Keep the original date
+                );
+                adminNotifier.updatePost(index, updatedPost);
+                Navigator.of(context).pop();
+              },
+              child: Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
