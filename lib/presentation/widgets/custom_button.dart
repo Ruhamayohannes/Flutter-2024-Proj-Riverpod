@@ -7,7 +7,8 @@ class CustomButton extends StatelessWidget {
   final buttonAction;
 
   const CustomButton(
-      {super.key, required this.buttonText,
+      {super.key,
+      required this.buttonText,
       required this.buttonColor,
       required this.buttonTextColor,
       required this.buttonAction});
@@ -28,7 +29,7 @@ class CustomButton extends StatelessWidget {
             buttonText,
             style: TextStyle(
                 color: buttonTextColor,
-                fontSize: 20,
+                fontSize: 16,
                 fontWeight: FontWeight.bold),
           ),
         ),

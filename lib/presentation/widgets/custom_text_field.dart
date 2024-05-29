@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 class CustomTextFormField extends StatelessWidget {
   final String labelText;
   final bool obscureText;
+  final String? errorText;
+  final void Function(String)? onChanged;
 
   const CustomTextFormField({
     required this.labelText,
     this.obscureText = false,
+    this.errorText,
+    this.onChanged,
   }) ;
 
   @override
@@ -29,6 +33,7 @@ class CustomTextFormField extends StatelessWidget {
             ),
           ),
           labelText: labelText,
+          errorText: errorText,
           labelStyle: TextStyle(
             color: Color.fromARGB(255, 165, 165, 165),
             fontSize: 18,
@@ -36,6 +41,7 @@ class CustomTextFormField extends StatelessWidget {
           ),
         ),
         obscureText: obscureText,
+        onChanged: onChanged,
         style: TextStyle(color: Colors.black),
       ),
     );
