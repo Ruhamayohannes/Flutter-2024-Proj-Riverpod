@@ -1,10 +1,8 @@
-import 'package:Sebawi/presentation/widgets/custom_button.dart';
-import 'package:Sebawi/presentation/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../application/providers/volunteer_signup_provider.dart'; // Import your VolunteerSignupNotifier
+import '../../application/providers/volunteer_signup_provider.dart';
 
 class VolunteerSignup extends ConsumerWidget {
   const VolunteerSignup({Key? key});
@@ -55,36 +53,59 @@ class VolunteerSignup extends ConsumerWidget {
                   ),
                 ),
                 SizedBox(height: 8.0),
-                CustomTextFormField(
-                  onChanged: signupNotifier.setFullName,
-                  labelText: 'Full name',
+                TextFormField(
+                  controller: signupNotifier.fullNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Full name',
+                    errorText: signupNotifier.fullNameError,
+                  ),
+                  onChanged: (value) => signupNotifier.setFullName(value),
                 ),
                 SizedBox(height: 10.0),
-                CustomTextFormField(
-                  onChanged: signupNotifier.setEmail,
-                  labelText: 'Enter Email',
+                TextFormField(
+                  controller: signupNotifier.emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Enter Email',
+                    errorText: signupNotifier.emailError,
+                  ),
+                  onChanged: (value) => signupNotifier.setEmail(value),
                 ),
                 SizedBox(height: 10.0),
-                CustomTextFormField(
-                  onChanged: signupNotifier.setUsername,
-                  labelText: 'Create Username',
+                TextFormField(
+                  controller: signupNotifier.usernameController,
+                  decoration: InputDecoration(
+                    labelText: 'Create Username',
+                    errorText: signupNotifier.usernameError,
+                  ),
+                  onChanged: (value) => signupNotifier.setUsername(value),
                 ),
                 SizedBox(height: 10.0),
-                CustomTextFormField(
-                  onChanged: signupNotifier.setPassword,
-                  labelText: 'Create Password',
+                TextFormField(
+                  controller: signupNotifier.passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Create Password',
+                    errorText: signupNotifier.passwordError,
+                  ),
+                  onChanged: (value) => signupNotifier.setPassword(value),
+                  obscureText: true,
                 ),
                 SizedBox(height: 10.0),
-                CustomTextFormField(
-                  onChanged: signupNotifier.setConfirmPassword,
-                  labelText: 'Confirm Password',
+                TextFormField(
+                  controller: signupNotifier.confirmPasswordController,
+                  decoration: InputDecoration(
+                    labelText: 'Confirm Password',
+                    errorText: signupNotifier.confirmPasswordError,
+                  ),
+                  onChanged: (value) =>
+                      signupNotifier.setConfirmPassword(value),
+                  obscureText: true,
                 ),
                 SizedBox(height: 40.0),
-                CustomButton(
-                    buttonText: 'Signup',
-                    buttonColor: const Color.fromARGB(255, 83, 171, 71),
-                    buttonTextColor: Colors.white,
-                    buttonAction: () => signupNotifier.signUp(context)),
+                ElevatedButton(
+                  onPressed: () => signupNotifier.signUp(context),
+                  style: ElevatedButton.styleFrom(),
+                  child: Text('Signup'),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(17),
                   child: Center(
@@ -110,7 +131,7 @@ class VolunteerSignup extends ConsumerWidget {
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

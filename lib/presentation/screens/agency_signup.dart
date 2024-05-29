@@ -52,30 +52,30 @@ class AgencySignup extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8.0),
-                const CustomTextFormField(
-                  labelText: 'Agency name',
-                  obscureText: true,
-                ),
-                const SizedBox(height: 10.0),
-                const CustomTextFormField(
-                  labelText: 'Enter Email',
-                  obscureText: true,
-                ),
-                const SizedBox(height: 10.0),
-                const CustomTextFormField(
-                  labelText: 'Create Username',
-                  obscureText: true,
-                ),
-                const SizedBox(height: 10.0),
-                const CustomTextFormField(
-                  labelText: 'Create Password',
-                  obscureText: true,
-                ),
-                const SizedBox(height: 10.0),
-                const CustomTextFormField(
-                  labelText: 'Confirm Password',
-                  obscureText: true,
-                ),
+                // const CustomTextFormField(
+                //   labelText: 'Agency name',
+                //   obscureText: true,
+                // ),
+                // const SizedBox(height: 10.0),
+                // const CustomTextFormField(
+                //   labelText: 'Enter Email',
+                //   obscureText: true,
+                // ),
+                // const SizedBox(height: 10.0),
+                // const CustomTextFormField(
+                //   labelText: 'Create Username',
+                //   obscureText: true,
+                // ),
+                // const SizedBox(height: 10.0),
+                // const CustomTextFormField(
+                //   labelText: 'Create Password',
+                //   obscureText: true,
+                // ),
+                // const SizedBox(height: 10.0),
+                // const CustomTextFormField(
+                //   labelText: 'Confirm Password',
+                //   obscureText: true,
+                // ),
                 const SizedBox(height: 40.0),
                 CustomButton(
                     buttonText: 'Signup',
