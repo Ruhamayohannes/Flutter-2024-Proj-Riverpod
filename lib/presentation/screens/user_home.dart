@@ -1,8 +1,7 @@
 import 'package:Sebawi/data/services/api_path.dart';
 import 'package:flutter/material.dart';
-
-import '../../data/models/posts.dart';
 import 'package:go_router/go_router.dart';
+import '../../data/models/posts.dart';
 
 class UserHomePage extends StatelessWidget {
   const UserHomePage({super.key});
@@ -26,12 +25,28 @@ class UserHomePage extends StatelessWidget {
             actions: [
               Padding(
                 padding: const EdgeInsets.only(top: 16.0, right: 16.0),
-                child: IconButton(
-                  onPressed: () {
-                    context.go('/user_update');
+                child: PopupMenuButton<String>(
+                  onSelected: (value) {
+                    if (value == 'logout') {
+                      context.go('/login');
+                    }
                   },
-                  icon: Icon(Icons.settings),
-                  color: Colors.green.shade800,
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      PopupMenuItem<String>(
+                        value: 'logout',
+                        child: Row(
+                          children: [
+                            Icon(Icons.logout, color: Colors.white),
+                            SizedBox(width: 8),
+                            Text('Logout'),
+                          ],
+                        ),
+                      ),
+                    ];
+                  },
+                  icon: Icon(Icons.logout),
+                  color: Color.fromARGB(255, 124, 181, 127),
                   iconSize: 27,
                 ),
               )
@@ -181,7 +196,7 @@ class PostItemState extends State<PostItem> {
                     child: Text(
                       " Service Type: ",
                       style:
-                      TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Text(widget.post.description),
@@ -196,12 +211,12 @@ class PostItemState extends State<PostItem> {
                       TextButton(
                         style: ButtonStyle(
                           backgroundColor:
-                          MaterialStateProperty.all(Colors.green.shade800),
+                              MaterialStateProperty.all(Colors.green.shade800),
                           shape:
-                          MaterialStateProperty.all<RoundedRectangleBorder>(
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.circular(20), // Border radius
+                                  BorderRadius.circular(20), // Border radius
                             ),
                           ),
                         ),
@@ -218,12 +233,12 @@ class PostItemState extends State<PostItem> {
                       TextButton(
                         style: ButtonStyle(
                           backgroundColor:
-                          MaterialStateProperty.all(Colors.green.shade800),
+                              MaterialStateProperty.all(Colors.green.shade800),
                           shape:
-                          MaterialStateProperty.all<RoundedRectangleBorder>(
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.circular(20), // Border radius
+                                  BorderRadius.circular(20), // Border radius
                             ),
                           ),
                         ),

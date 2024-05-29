@@ -1,4 +1,4 @@
-import 'package:Sebawi/application/providers/agency_provider.dart'; // Import the provider
+import 'package:Sebawi/application/providers/agency_provider.dart';
 import 'package:Sebawi/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,11 +57,27 @@ class AgencyHomePage extends ConsumerWidget {
           actions: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0, right: 16.0),
-              child: IconButton(
-                onPressed: () {
-                  context.go('/agency_update');
+              child: PopupMenuButton<String>(
+                onSelected: (value) {
+                  if (value == 'logout') {
+                    context.go('/login');
+                  }
                 },
-                icon: Icon(Icons.settings),
+                itemBuilder: (BuildContext context) {
+                  return [
+                    PopupMenuItem<String>(
+                      value: 'logout',
+                      child: Row(
+                        children: [
+                          Icon(Icons.logout, color: Colors.white),
+                          SizedBox(width: 8),
+                          Text('Logout'),
+                        ],
+                      ),
+                    ),
+                  ];
+                },
+                icon: Icon(Icons.logout),
                 color: Colors.green.shade800,
                 iconSize: 27,
               ),
