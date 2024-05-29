@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:Sebawi/presentation/widgets/custom_button.dart';
+import 'package:Sebawi/application/providers/signup_provider.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends ConsumerWidget {
   const SignupScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final signupNotifier = ref.watch(signupProvider);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -50,7 +54,7 @@ class SignupScreen extends StatelessWidget {
                   buttonColor: const Color.fromARGB(255, 83, 171, 71),
                   buttonTextColor: Colors.white,
                   buttonAction: () {
-                    context.go("/volunteer_signup");
+                    signupNotifier.navigateToVolunteerSignup(context);
                   },
                 ),
                 const SizedBox(height: 8.0),
@@ -92,7 +96,7 @@ class SignupScreen extends StatelessWidget {
                   buttonColor: Colors.white,
                   buttonTextColor: const Color.fromARGB(255, 83, 171, 71),
                   buttonAction: () {
-                    context.go('/agency_signup');
+                    signupNotifier.navigateToAgencySignup(context);
                   },
                 ),
               ],
