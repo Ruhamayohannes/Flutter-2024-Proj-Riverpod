@@ -79,7 +79,7 @@ class AgencySignup extends ConsumerWidget {
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
-                      labelText: 'Full name',
+                      labelText: 'Agency name',
                       errorText: signupNotifier.agnecyNameError,
                     ),
                     onChanged: (value) => signupNotifier.setAgnecyName(value),
