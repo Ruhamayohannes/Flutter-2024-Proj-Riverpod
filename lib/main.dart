@@ -12,9 +12,9 @@ import 'package:Sebawi/presentation/screens/user_update.dart';
 import 'package:Sebawi/presentation/screens/volunteer-signup.dart';
 import 'package:Sebawi/presentation/screens/home_page.dart';
 import 'package:Sebawi/presentation/screens/user_home.dart';
-import 'package:Sebawi/application/providers/user_update_provider.dart'; 
-import 'package:Sebawi/application/providers/agency_update_provider.dart'; 
-import 'package:Sebawi/application/providers/agency_provider.dart'; 
+import 'package:Sebawi/application/providers/user_update_provider.dart';
+import 'package:Sebawi/application/providers/agency_update_provider.dart';
+import 'package:Sebawi/application/providers/agency_provider.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
@@ -152,8 +152,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor: Colors.green[800],
-          foregroundColor: Colors.white,
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          foregroundColor:  Colors.green.shade800,
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(

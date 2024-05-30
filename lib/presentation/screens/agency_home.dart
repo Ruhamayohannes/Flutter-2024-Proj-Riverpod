@@ -22,23 +22,29 @@ class AgencyHomePage extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           bottom: TabBar(
-            tabs: const [
+            tabs: [
               Tab(
                 child: Text(
                   "All Posts",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green.shade800),
                 ),
               ),
               Tab(
                 child: Text(
                   "My Posts",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green.shade800),
                 ),
               ),
               Tab(
                 child: Text(
                   "Add Post",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green.shade800),
                 ),
               ),
             ],
