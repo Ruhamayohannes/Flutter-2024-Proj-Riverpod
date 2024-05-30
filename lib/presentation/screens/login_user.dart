@@ -56,7 +56,8 @@ class LoginUser extends ConsumerWidget {
               ),
               SizedBox(height: 8.0),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 35)
+                    .copyWith(bottom: 10),
                 child: TextFormField(
                   controller: loginNotifier.usernameController,
                   decoration: InputDecoration(
@@ -86,7 +87,7 @@ class LoginUser extends ConsumerWidget {
               ),
               SizedBox(height: 10.0),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 35),
                 child: TextField(
                   controller: loginNotifier.passwordController,
                   decoration: InputDecoration(

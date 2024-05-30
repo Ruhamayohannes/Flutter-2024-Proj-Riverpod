@@ -49,9 +49,13 @@ class _AdminPageState extends ConsumerState<AdminPage>
                     value: 'logout',
                     child: Row(
                       children: [
-                        Icon(Icons.logout, color: Colors.green.shade800),
+                        Icon(Icons.logout,
+                            color: const Color.fromARGB(255, 255, 255, 255)),
                         SizedBox(width: 8),
-                        Text('Logout'),
+                        Text(
+                          'Logout',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ],
                     ),
                   ),
@@ -66,7 +70,10 @@ class _AdminPageState extends ConsumerState<AdminPage>
         bottom: TabBar(
           controller: _tabController,
           tabs: [
-            Tab(icon: Icon(Icons.person), text: 'Manage Users',),
+            Tab(
+              icon: Icon(Icons.person),
+              text: 'Manage Users',
+            ),
             Tab(icon: Icon(Icons.business), text: 'Manage Agencies'),
             Tab(icon: Icon(Icons.post_add), text: 'Manage Posts'),
           ],

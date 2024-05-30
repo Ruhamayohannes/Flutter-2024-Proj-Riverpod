@@ -1,3 +1,4 @@
+import 'package:Sebawi/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -53,59 +54,164 @@ class VolunteerSignup extends ConsumerWidget {
                   ),
                 ),
                 SizedBox(height: 8.0),
-                TextFormField(
-                  controller: signupNotifier.fullNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Full name',
-                    errorText: signupNotifier.fullNameError,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: TextFormField(
+                    controller: signupNotifier.fullNameController,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(bottom: 4.0),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 31, 78, 33),
+                          style: BorderStyle.solid,
+                          width: 2,
+                        ),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(213, 213, 213, 1),
+                        ),
+                      ),
+                      labelStyle: TextStyle(
+                        color: Color.fromARGB(255, 165, 165, 165),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      labelText: 'Full name',
+                      errorText: signupNotifier.fullNameError,
+                    ),
+                    onChanged: (value) => signupNotifier.setFullName(value),
                   ),
-                  onChanged: (value) => signupNotifier.setFullName(value),
                 ),
                 SizedBox(height: 10.0),
-                TextFormField(
-                  controller: signupNotifier.emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Enter Email',
-                    errorText: signupNotifier.emailError,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: TextFormField(
+                    controller: signupNotifier.emailController,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(bottom: 4.0),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 31, 78, 33),
+                          style: BorderStyle.solid,
+                          width: 2,
+                        ),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(213, 213, 213, 1),
+                        ),
+                      ),
+                      labelStyle: TextStyle(
+                        color: Color.fromARGB(255, 165, 165, 165),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      labelText: 'Enter Email',
+                      errorText: signupNotifier.emailError,
+                    ),
+                    onChanged: (value) => signupNotifier.setEmail(value),
                   ),
-                  onChanged: (value) => signupNotifier.setEmail(value),
                 ),
                 SizedBox(height: 10.0),
-                TextFormField(
-                  controller: signupNotifier.usernameController,
-                  decoration: InputDecoration(
-                    labelText: 'Create Username',
-                    errorText: signupNotifier.usernameError,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: TextFormField(
+                    controller: signupNotifier.usernameController,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(bottom: 4.0),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 31, 78, 33),
+                          style: BorderStyle.solid,
+                          width: 2,
+                        ),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(213, 213, 213, 1),
+                        ),
+                      ),
+                      labelStyle: TextStyle(
+                        color: Color.fromARGB(255, 165, 165, 165),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      labelText: 'Create Username',
+                      errorText: signupNotifier.usernameError,
+                    ),
+                    onChanged: (value) => signupNotifier.setUsername(value),
                   ),
-                  onChanged: (value) => signupNotifier.setUsername(value),
                 ),
                 SizedBox(height: 10.0),
-                TextFormField(
-                  controller: signupNotifier.passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Create Password',
-                    errorText: signupNotifier.passwordError,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: TextFormField(
+                    controller: signupNotifier.passwordController,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(bottom: 4.0),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 31, 78, 33),
+                          style: BorderStyle.solid,
+                          width: 2,
+                        ),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(213, 213, 213, 1),
+                        ),
+                      ),
+                      labelStyle: TextStyle(
+                        color: Color.fromARGB(255, 165, 165, 165),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      labelText: 'Create Password',
+                      errorText: signupNotifier.passwordError,
+                    ),
+                    onChanged: (value) => signupNotifier.setPassword(value),
+                    obscureText: true,
                   ),
-                  onChanged: (value) => signupNotifier.setPassword(value),
-                  obscureText: true,
                 ),
                 SizedBox(height: 10.0),
-                TextFormField(
-                  controller: signupNotifier.confirmPasswordController,
-                  decoration: InputDecoration(
-                    labelText: 'Confirm Password',
-                    errorText: signupNotifier.confirmPasswordError,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: TextFormField(
+                    controller: signupNotifier.confirmPasswordController,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(bottom: 4.0),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 31, 78, 33),
+                          style: BorderStyle.solid,
+                          width: 2,
+                        ),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(213, 213, 213, 1),
+                        ),
+                      ),
+                      labelStyle: TextStyle(
+                        color: Color.fromARGB(255, 165, 165, 165),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      labelText: 'Confirm Password',
+                      errorText: signupNotifier.confirmPasswordError,
+                    ),
+                    onChanged: (value) =>
+                        signupNotifier.setConfirmPassword(value),
+                    obscureText: true,
                   ),
-                  onChanged: (value) =>
-                      signupNotifier.setConfirmPassword(value),
-                  obscureText: true,
                 ),
                 SizedBox(height: 40.0),
-                ElevatedButton(
-                  onPressed: () => signupNotifier.signUp(context),
-                  style: ElevatedButton.styleFrom(),
-                  child: Text('Signup'),
-                ),
+                CustomButton(
+                    buttonText: 'Signup',
+                    buttonColor: Colors.green.shade800,
+                    buttonTextColor: Colors.white,
+                    buttonAction: () => signupNotifier.signUp(context)),
                 Padding(
                   padding: const EdgeInsets.all(17),
                   child: Center(
