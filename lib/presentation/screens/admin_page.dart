@@ -30,11 +30,10 @@ class _AdminPageState extends ConsumerState<AdminPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Admin Dashboard',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.green.shade800),
         ),
-        backgroundColor: Color.fromARGB(255, 51, 114, 53),
         actions: [
           Padding(
             padding: const EdgeInsets.only(top: 16.0, right: 16.0),
@@ -50,7 +49,7 @@ class _AdminPageState extends ConsumerState<AdminPage>
                     value: 'logout',
                     child: Row(
                       children: [
-                        Icon(Icons.logout, color: Colors.white),
+                        Icon(Icons.logout, color: Colors.green.shade800),
                         SizedBox(width: 8),
                         Text('Logout'),
                       ],
@@ -67,13 +66,13 @@ class _AdminPageState extends ConsumerState<AdminPage>
         bottom: TabBar(
           controller: _tabController,
           tabs: [
-            Tab(icon: Icon(Icons.person), text: 'Manage Users'),
+            Tab(icon: Icon(Icons.person), text: 'Manage Users',),
             Tab(icon: Icon(Icons.business), text: 'Manage Agencies'),
             Tab(icon: Icon(Icons.post_add), text: 'Manage Posts'),
           ],
-          indicatorColor: Colors.white,
-          unselectedLabelColor: Colors.white54,
-          labelColor: Colors.white,
+          indicatorColor: Colors.green.shade800,
+          unselectedLabelColor: Colors.green.shade800,
+          labelColor: Colors.green.shade800,
           indicatorWeight: 3,
         ),
       ),

@@ -1,4 +1,6 @@
+import 'package:Sebawi/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../application/providers/login_admin_provider.dart';
@@ -38,8 +40,10 @@ class AdminLoginPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Login'),
-        backgroundColor: Colors.green[800],
+        title: const Text(
+          'Admin Login',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Center(
         child: Padding(
@@ -66,21 +70,11 @@ class AdminLoginPage extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: _login,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightGreen.withOpacity(0.5),
-                  foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    side: BorderSide(color: Colors.green[800]!, width: 3),
-                  ),
-                  shadowColor: Colors.greenAccent,
-                ),
-                child: const Text('Login'),
-              ),
+              CustomButton(
+                  buttonText: 'Login',
+                  buttonColor: Colors.green.shade800,
+                  buttonTextColor: Colors.white,
+                  buttonAction: _login)
             ],
           ),
         ),
