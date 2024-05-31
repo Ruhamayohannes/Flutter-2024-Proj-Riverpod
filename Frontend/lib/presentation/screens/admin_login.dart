@@ -11,6 +11,7 @@ class AdminLoginPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final loginNotifier = ref.watch(loginProvider);
     final adminLoginNotifier = ref.watch(adminLoginProvider);
 
     void _login() async {
@@ -30,32 +31,66 @@ class AdminLoginPage extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              TextField(
-                controller: adminLoginNotifier.usernameController,
+              TextFormField(
+                controller: loginNotifier.usernameController,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.only(bottom: 4.0),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 31, 78, 33),
+                      style: BorderStyle.solid,
+                      width: 2,
+                    ),
+                  ),
+                  enabledBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(213, 213, 213, 1),
+                    ),
+                  ),
                   labelText: 'Username',
-                  border: const OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.person),
-                  errorText: adminLoginNotifier.usernameError,
+                  errorText: loginNotifier.usernameError,
+                  labelStyle: const TextStyle(
+                    color: Color.fromARGB(255, 165, 165, 165),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
+                onChanged: loginNotifier.setUsername,
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: adminLoginNotifier.passwordController,
-                obscureText: true,
+                controller: loginNotifier.passwordController,
                 decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(bottom: 4.0),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 31, 78, 33),
+                      style: BorderStyle.solid,
+                      width: 2,
+                    ),
+                  ),
+                  enabledBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(213, 213, 213, 1),
+                    ),
+                  ),
+                  labelStyle: const TextStyle(
+                    color: Color.fromARGB(255, 165, 165, 165),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                   labelText: 'Password',
-                  border: const OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.lock),
-                  errorText: adminLoginNotifier.passwordError,
+                  errorText: loginNotifier.passwordError,
                 ),
+                obscureText: true,
+                onChanged: loginNotifier.setPassword,
               ),
               const SizedBox(height: 40),
               CustomButton(
                 buttonText: 'Login',
                 buttonColor: Colors.green.shade800,
                 buttonTextColor: Colors.white,
-                buttonAction: _login,
+                buttonAction: () => loginNotifier.login(context),
               ),
               if (adminLoginNotifier.loginError != null)
                 Padding(
