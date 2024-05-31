@@ -5,7 +5,6 @@ import 'package:Sebawi/presentation/screens/admin_login.dart';
 
 void main() {
   testWidgets('AdminLoginPage displays correctly', (WidgetTester tester) async {
-    // Build the AdminLoginPage widget
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
@@ -13,8 +12,6 @@ void main() {
         ),
       ),
     );
-
-    // Verify the initial UI elements
     expect(find.text('Admin Login'), findsOneWidget);
     expect(find.text('Username'), findsOneWidget);
     expect(find.text('Password'), findsOneWidget);

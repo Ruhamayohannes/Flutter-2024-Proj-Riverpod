@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../data/models/posts.dart';
-import '../../application/providers/posts_provoder.dart';
+import '../../application/providers/posts_provider.dart';
 
 class UserHomePage extends StatelessWidget {
   const UserHomePage({super.key});

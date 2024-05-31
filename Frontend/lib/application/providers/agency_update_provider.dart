@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AgencyProvider extends ChangeNotifier {
+class AgencyUpdateProvider extends ChangeNotifier {
   String _agencyName = '';
   String _agencyEmail = '';
   String _password = '';
@@ -22,7 +22,6 @@ class AgencyProvider extends ChangeNotifier {
   }
 
   void deleteAccount() {
-    // Perform account deletion logic here, such as API calls or local data removal
     _agencyName = '';
     _agencyEmail = '';
     _password = '';
@@ -30,4 +29,4 @@ class AgencyProvider extends ChangeNotifier {
   }
 }
 
-final agencyProvider = ChangeNotifierProvider((ref) => AgencyProvider());
+final agencyUpdateProvider = ChangeNotifierProvider((ref) => AgencyUpdateProvider());
