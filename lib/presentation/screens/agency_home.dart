@@ -67,10 +67,22 @@ class AgencyHomePage extends ConsumerWidget {
                 onSelected: (value) {
                   if (value == 'logout') {
                     context.go('/login');
+                  } else if (value == 'update_profile') {
+                    context.go('/user_update');
                   }
                 },
                 itemBuilder: (BuildContext context) {
                   return [
+                    PopupMenuItem<String>(
+                      value: 'update_profile',
+                      child: Row(
+                        children: [
+                          Icon(Icons.edit, color: Colors.white),
+                          SizedBox(width: 8),
+                          Text('Update Profile'),
+                        ],
+                      ),
+                    ),
                     PopupMenuItem<String>(
                       value: 'logout',
                       child: Row(
@@ -83,8 +95,8 @@ class AgencyHomePage extends ConsumerWidget {
                     ),
                   ];
                 },
-                icon: Icon(Icons.logout),
-                color: Colors.green.shade800,
+                icon: Icon(Icons.settings),
+                color: Color.fromARGB(255, 124, 181, 127),
                 iconSize: 27,
               ),
             )
