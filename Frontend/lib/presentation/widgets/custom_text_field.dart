@@ -12,7 +12,7 @@ class CustomTextFormField extends StatelessWidget {
     this.obscureText = false,
     this.errorText,
     this.onChanged,
-    required this.controller,
+    required this.controller, required Null Function(dynamic value) onChange, required String? Function(String? value) validator,
 
 
   }) ;
