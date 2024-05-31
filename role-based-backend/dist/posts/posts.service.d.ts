@@ -26,6 +26,7 @@
 import { Posts } from './schemas/posts.schema';
 import mongoose, { Model } from 'mongoose';
 import { User } from 'src/user/schemas/user.schema';
+import { CreatePostsDto } from './dto/create-posts.dto';
 export interface MulterFile {
     fieldname: string;
     originalname: string;
@@ -40,7 +41,7 @@ export interface MulterFile {
 export declare class PostsService {
     private readonly postsModel;
     constructor(postsModel: Model<Posts>);
-    createPosts(posts: Posts, user: User): Promise<Posts>;
+    createPosts(createPostsDto: CreatePostsDto, user: User): Promise<Posts>;
     readPosts(): Promise<void | (mongoose.Document<unknown, {}, Posts> & Posts & {
         _id: mongoose.Types.ObjectId;
     })[]>;

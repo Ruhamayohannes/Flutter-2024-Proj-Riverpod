@@ -16,8 +16,5 @@ export class CreatePostsDto {
     @IsString()
     readonly contact: string;
 
-    @IsEmpty({ message: 'you can not pass user id' })
-    readonly user: User;
-
-    readonly image: File;
+   
 }
