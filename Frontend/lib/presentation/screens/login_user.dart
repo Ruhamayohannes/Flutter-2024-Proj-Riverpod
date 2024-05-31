@@ -2,7 +2,6 @@ import 'package:Sebawi/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../application/providers/login_user_provider.dart';
 
 class LoginUser extends ConsumerWidget {
@@ -123,6 +122,15 @@ class LoginUser extends ConsumerWidget {
                 buttonTextColor: Colors.white,
                 buttonColor: const Color.fromARGB(255, 83, 171, 71),
               ),
+              if (loginNotifier.loginError != null)
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                  child: Text(
+                    loginNotifier.loginError!,
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.all(17),
                 child: Center(

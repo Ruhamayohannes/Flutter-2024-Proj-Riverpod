@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../data/services/api_path.dart'; 
 
 // Define providers for login
 final loginProvider = ChangeNotifierProvider((ref) => LoginNotifier());
@@ -11,6 +12,8 @@ class LoginNotifier extends ChangeNotifier {
 
   String? usernameError;
   String? passwordError;
+  String? loginError;
+  String? token; // Store the token
 
   void setUsername(String value) {
     if (value.isEmpty) {
@@ -41,8 +44,24 @@ class LoginNotifier extends ChangeNotifier {
 
   Future<void> login(BuildContext context) async {
     if (validateForm()) {
-      print('Login successful');
-      context.go('/user_home');
+      try {
+        final result = await logIn(
+          usernameController.text,
+          passwordController.text,
+        );
+        if (result == null) {
+          // Login successful
+          token = 'some_token'; // Replace with actual token
+          print('Login successful: $token');
+          context.go('/user_home');
+        } else {
+          loginError = result;
+          notifyListeners();
+        }
+      } catch (e) {
+        loginError = 'Login failed. Please try again.';
+        notifyListeners();
+      }
     } else {
       print('Validation failed');
       notifyListeners();
