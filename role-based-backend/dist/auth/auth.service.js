@@ -59,7 +59,7 @@ let AuthService = class AuthService {
             id: user._id,
             role: user.role
         });
-        return { token, status: user.role };
+        return { userId: user._id.toString(), token, status: user.role };
     }
 };
 exports.AuthService = AuthService;

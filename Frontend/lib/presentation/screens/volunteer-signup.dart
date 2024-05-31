@@ -212,6 +212,16 @@ class VolunteerSignup extends ConsumerWidget {
                     buttonColor: Colors.green.shade800,
                     buttonTextColor: Colors.white,
                     buttonAction: () => signupNotifier.signUp(context)),
+                if (signupNotifier.signupError != null)
+                  Padding(
+                    padding: const EdgeInsets.all(17),
+                    child: Center(
+                      child: Text(
+                        signupNotifier.signupError!,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ),
                 Padding(
                   padding: const EdgeInsets.all(17),
                   child: Center(

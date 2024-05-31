@@ -48,4 +48,5 @@ export class PostsController {
     return this.postsService.deletePosts(postsId);
   }
 
+
 }

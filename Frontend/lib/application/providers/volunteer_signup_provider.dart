@@ -22,7 +22,8 @@ class VolunteerSignupNotifier extends ChangeNotifier {
   String? confirmPasswordError;
   String? _password;
   String? _fullName;
-  String? _role; // Role to be set from SignupNotifier
+  String? _role;
+  String? signupError; // Error message for signup process
 
   void setFullName(String value) {
     _fullName = value;
@@ -97,21 +98,20 @@ class VolunteerSignupNotifier extends ChangeNotifier {
 
   Future<void> signUp(BuildContext context) async {
     if (validateForm()) {
-      final result = await signUpApi(
+      final responseMessage = await signUpApi(
         fullNameController.text,
         emailController.text,
         usernameController.text,
         passwordController.text,
-        _role!, // Ensure role is set
       );
 
-      if (result == null) {
+      if (responseMessage == null) {
         // Sign up successful
         context.go('/user_home'); // Navigate to user home
       } else {
-        // Sign up failed, handle error
-        // Show error message (this could be improved to show a user-friendly message in the UI)
-        print(result);
+        // Sign up failed, set error message
+        signupError = responseMessage;
+        notifyListeners();
       }
     } else {
       notifyListeners();
@@ -119,27 +119,32 @@ class VolunteerSignupNotifier extends ChangeNotifier {
   }
 
   Future<String?> signUpApi(String fullName, String email, String username,
-      String password, String role) async {
-    final response = await http.post(
-      Uri.parse('http://192.168.229.141:3000/auth/signup'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'name': fullName,
-        "username": username,
-        'email': email,
-        'password': password,
-        'role': role,
-      }),
-    );
-    if (response.statusCode == 201) {
-      print("success");
-      return null;
-    } else {
-      print(response.statusCode);
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      return responseBody['message'] ?? 'Failed to sign up';
+      String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://192.168.229.141:3000/auth/signup'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'name': fullName,
+          "username": username,
+          'email': email,
+          'password': password,
+          'role': 'user',
+        }),
+      );
+      
+      if (response.statusCode == 201) {
+        print("success");
+        return null; // Sign up successful
+      } else {
+        print(response.statusCode);
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        return responseBody['message'] ?? 'Failed to sign up';
+      }
+    } catch (e) {
+      return 'Failed to connect to server'; // Handle connection error
     }
   }
 

@@ -36,7 +36,7 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/signup',
       name: "signup",
-      builder: (context, state) => const SignupScreen(),
+      builder: (context, state) => const SignupPage(),
     ),
     GoRoute(
       path: '/login',
@@ -153,7 +153,7 @@ class MyApp extends StatelessWidget {
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-          foregroundColor:  Colors.green.shade800,
+          foregroundColor: Colors.green.shade800,
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(

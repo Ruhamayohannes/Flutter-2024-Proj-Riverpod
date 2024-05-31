@@ -43,10 +43,10 @@ export class AuthService {
     }
     
     // login method
-    async login(loginDto: LogInDto): Promise<{ token: string; status: string }> {
+    async login(loginDto: LogInDto): Promise<{ userId: string; token: string; status: string }> {
         const { username, password } = loginDto;
     
-        const user = await this.userModel.findOne({ username }).select('+password +role'); // Include role in selection
+        const user = await this.userModel.findOne({ username }).select('+password +role');
     
         if (!user) {
             throw new UnauthorizedException('Invalid username or password');
@@ -62,6 +62,8 @@ export class AuthService {
             role: user.role
         });
     
-        return { token, status: user.role }; 
-}
+        return { userId: user._id.toString(), token, status: user.role };
+
+    }
+    
 }
