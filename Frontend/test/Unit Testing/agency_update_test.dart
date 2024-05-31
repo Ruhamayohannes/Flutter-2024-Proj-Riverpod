@@ -16,7 +16,7 @@ void main() {
 
     test('Initial values are correct', () {
       // Act
-      final agencyUpdateProviderInstance = container.read(agencyUpdateProvider);
+      final agencyUpdateProviderInstance = container.read(agencyProvider);
 
       // Assert
       expect(agencyUpdateProviderInstance.agencyName, '');
@@ -26,7 +26,7 @@ void main() {
 
     test('Update profile updates the values correctly', () {
       // Arrange
-      final agencyUpdateProviderInstance = container.read(agencyUpdateProvider);
+      final agencyUpdateProviderInstance = container.read(agencyProvider);
 
       // Act
       agencyUpdateProviderInstance.updateProfile(
@@ -43,7 +43,7 @@ void main() {
 
     test('Delete account resets the values correctly', () {
       // Arrange
-      final agencyUpdateProviderInstance = container.read(agencyUpdateProvider);
+      final agencyUpdateProviderInstance = container.read(agencyProvider);
       agencyUpdateProviderInstance.updateProfile(
         agencyName: 'Test Agency',
         agencyEmail: 'test@agency.com',

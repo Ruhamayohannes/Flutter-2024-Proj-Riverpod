@@ -26,7 +26,7 @@ void main() {
     });
 
     test('setAgencyName sets the agency name correctly', () {
-      agencySignupNotifier.setagencyName('Test Agency');
+      agencySignupNotifier.setAgencyName('Test Agency');
       expect(agencySignupNotifier.agencyNameError, isNull);
     });
 
