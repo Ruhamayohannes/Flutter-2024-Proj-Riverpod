@@ -12,8 +12,7 @@ class AgencyHomePage extends ConsumerWidget {
     final agencyNotifier = ref.watch(agencyProvider.notifier);
     final posts = ref.watch(agencyProvider).posts;
 
-    // Assuming the current user's posts can be identified somehow
-    // Here we're just assuming the first half of the posts are the user's posts for demonstration
+    
     final myPosts =
         posts.where((post) => post.agencyName == "Mekedonia").toList();
 
