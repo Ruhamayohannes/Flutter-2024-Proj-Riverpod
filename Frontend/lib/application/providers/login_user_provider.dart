@@ -37,30 +37,24 @@ class LoginNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(BuildContext context) async {
+  Future<void> login(context) async {
     setUsername(usernameController.text);
     setPassword(passwordController.text);
 
     if (usernameError != null || passwordError != null) {
       return;
     }
-
-    try {
       final responseBody = await remoteService.logIn(
           usernameController.text, passwordController.text);
-      final status = responseBody?['status'];
+      final status = responseBody['status'];
       if (status == 'user') {
         context.go('/user_home');
       } else if (status == 'agency') {
         context.go('/agency_home');
       } else {
-        loginError = responseBody?['message'] ?? 'Failed to login';
+        loginError = responseBody['message'] ?? 'Failed to login';
         notifyListeners();
       }
-    } catch (e) {
-      loginError = 'Failed to login';
-      notifyListeners();
-    }
   }
 
   @override

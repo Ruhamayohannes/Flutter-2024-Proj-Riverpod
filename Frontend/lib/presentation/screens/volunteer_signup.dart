@@ -218,7 +218,7 @@ class VolunteerSignup extends ConsumerWidget {
                     child: Center(
                       child: Text(
                         signupNotifier.signupError!,
-                        style: TextStyle(color: Colors.red),
+                        style: const TextStyle(color: Colors.red),
                       ),
                     ),
                   ),

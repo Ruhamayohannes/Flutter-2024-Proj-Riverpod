@@ -6,6 +6,7 @@ import '../../application/providers/posts_provider.dart';
 import '../../data/models/calendars.dart';
 import '../../data/models/posts_model.dart';
 import '../../application/providers/calendar_provider.dart';
+import '../../data/services/api_path.dart';
 
 class UserHomePage extends ConsumerWidget {
   const UserHomePage({super.key});
@@ -32,7 +33,11 @@ class UserHomePage extends ConsumerWidget {
                 child: PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'logout') {
-                      context.go('/login');
+                      SharedPreferenceService sharedPrefService =
+                      SharedPreferenceService();
+                      sharedPrefService.writeCache(
+                          key: "token", value: "");
+                      context.go("/");
                     } else if (value == 'update_profile') {
                       context.go('/user_update');
                     }

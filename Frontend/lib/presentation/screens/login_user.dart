@@ -126,9 +126,11 @@ class LoginUser extends ConsumerWidget {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
-                  child: Text(
-                    loginNotifier.loginError!,
-                    style: TextStyle(color: Colors.red),
+                  child: Center(
+                    child: Text(
+                      loginNotifier.loginError!,
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   ),
                 ),
               Padding(
