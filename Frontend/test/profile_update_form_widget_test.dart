@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:Sebawi/presentation/widgets/profile_update.dart';
 import 'package:Sebawi/presentation/widgets/custom_button.dart';
-import 'package:Sebawi/main.dart';
 
 void main() {
   testWidgets('ProfileUpdate displays form fields and buttons correctly', (WidgetTester tester) async {

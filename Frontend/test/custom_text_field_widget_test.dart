@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:Sebawi/presentation/widgets/custom_text_field.dart';
-import 'package:Sebawi/main.dart';
 
 
 void main() {
