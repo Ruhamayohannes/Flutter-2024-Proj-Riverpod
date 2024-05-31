@@ -47,7 +47,7 @@ class LoginUserNotifier extends StateNotifier<LoginUserState> {
     state = state.copyWith(password: password);
   }
 
-  void login() async {
+  Future<void> login() async {
     // Validate inputs
     if (state.username.isEmpty) {
       state = state.copyWith(usernameError: 'Username cannot be empty');
@@ -63,13 +63,17 @@ class LoginUserNotifier extends StateNotifier<LoginUserState> {
 
     if (state.username.isNotEmpty && state.password.isNotEmpty) {
       state = state.copyWith(isLoading: true);
-      await Future.delayed(const Duration(seconds: 2)); // Simulate a network call
+      await Future.delayed(
+          const Duration(seconds: 2)); // Simulate a network call
 
       // Simulate login logic
       if (state.username == 'admin' && state.password == 'password') {
         state = state.copyWith(isLoggedIn: true, isLoading: false);
       } else {
-        state = state.copyWith(isLoggedIn: false, isLoading: false, passwordError: 'Invalid credentials');
+        state = state.copyWith(
+            isLoggedIn: false,
+            isLoading: false,
+            passwordError: 'Invalid credentials');
       }
     }
   }
