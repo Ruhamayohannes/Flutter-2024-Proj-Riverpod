@@ -45,8 +45,8 @@ class RemoteService {
   }
 
   Future<int?> addPost(post) async {
-    SharedPreferenceService sharedPrefService = SharedPreferenceService();
-    String? token = await sharedPrefService.readCache(key: "token");
+    SharedPreferenceService _sharedPrefService = SharedPreferenceService();
+    String? token = await _sharedPrefService.readCache(key: "token");
     if (token == null) {
       return 401;
     }
@@ -64,7 +64,7 @@ class RemoteService {
   }
 
   Future<Map<String, dynamic>> logIn(String username, String password) async {
-    SharedPreferenceService sharedPrefService = SharedPreferenceService();
+    SharedPreferenceService _sharedPrefService = SharedPreferenceService();
     print(username);
     print(password);
     var client = http.Client();
@@ -82,9 +82,9 @@ class RemoteService {
     final response = await client.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      await sharedPrefService.writeCache(
+      await _sharedPrefService.writeCache(
           key: "token", value: responseBody['token']);
-      await sharedPrefService.writeCache(
+      await _sharedPrefService.writeCache(
           key: "uId", value: responseBody['userId']);
       print(responseBody);
       return responseBody; // Return the entire response body
@@ -95,9 +95,9 @@ class RemoteService {
   }
 
   Future<String?>? addToCalendar(String date, String id) async {
-    SharedPreferenceService sharedPrefService = SharedPreferenceService();
-    String? userId = await sharedPrefService.readCache(key: "uId");
-    String? token = await sharedPrefService.readCache(key: "token");
+    SharedPreferenceService _sharedPrefService = SharedPreferenceService();
+    String? userId = await _sharedPrefService.readCache(key: "uId");
+    String? token = await _sharedPrefService.readCache(key: "token");
     if (userId == null || token == null) {
       return null;
     }
@@ -115,7 +115,7 @@ class RemoteService {
     print(response.body);
     if (response.statusCode == 201) {
       var responseBody = jsonDecode(response.body);
-      sharedPrefService.writeCache(
+      _sharedPrefService.writeCache(
           key: "calendarId", value: responseBody["_id"]);
       return "Post Created";
     } else {

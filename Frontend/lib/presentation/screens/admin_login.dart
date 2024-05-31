@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../application/providers/login_admin_provider.dart';
+import '../../application/providers/login_user_provider.dart';
 
 class AdminLoginPage extends ConsumerWidget {
   const AdminLoginPage({super.key});
@@ -59,9 +60,11 @@ class AdminLoginPage extends ConsumerWidget {
               if (adminLoginNotifier.loginError != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
-                  child: Text(
-                    adminLoginNotifier.loginError!,
-                    style: const TextStyle(color: Colors.red),
+                  child: Center(
+                    child: Text(
+                      adminLoginNotifier.loginError!,
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   ),
                 ),
             ],

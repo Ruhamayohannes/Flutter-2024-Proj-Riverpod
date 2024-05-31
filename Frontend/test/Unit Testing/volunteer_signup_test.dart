@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:Sebawi/presentation/screens/volunteer-signup.dart';
+import 'package:Sebawi/presentation/screens/volunteer_signup.dart';
 import 'package:Sebawi/presentation/widgets/custom_button.dart';
 
 void main() {

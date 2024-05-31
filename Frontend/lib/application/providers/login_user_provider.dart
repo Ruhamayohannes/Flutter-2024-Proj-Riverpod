@@ -37,7 +37,7 @@ class LoginNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(context) async {
+  Future<void> login(BuildContext context) async {
     setUsername(usernameController.text);
     setPassword(passwordController.text);
 
@@ -51,6 +51,8 @@ class LoginNotifier extends ChangeNotifier {
         context.go('/user_home');
       } else if (status == 'agency') {
         context.go('/agency_home');
+      } else if (status == 'admin') {
+        context.go('/admin');
       } else {
         loginError = responseBody['message'] ?? 'Failed to login';
         notifyListeners();
