@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreatePostsDto = void 0;
 const class_validator_1 = require("class-validator");
-const user_schema_1 = require("../../user/schemas/user.schema");
 class CreatePostsDto {
 }
 exports.CreatePostsDto = CreatePostsDto;
@@ -30,8 +29,4 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreatePostsDto.prototype, "contact", void 0);
-__decorate([
-    (0, class_validator_1.IsEmpty)({ message: 'you can not pass user id' }),
-    __metadata("design:type", user_schema_1.User)
-], CreatePostsDto.prototype, "user", void 0);
 //# sourceMappingURL=create-posts.dto.js.map

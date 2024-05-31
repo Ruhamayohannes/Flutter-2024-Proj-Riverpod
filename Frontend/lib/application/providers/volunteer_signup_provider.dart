@@ -23,7 +23,7 @@ class VolunteerSignupNotifier extends ChangeNotifier {
   String? _password;
   String? _fullName;
   String? _role;
-  String? signupError; // Error message for signup process
+  String? signupError; 
 
   void setFullName(String value) {
     _fullName = value;

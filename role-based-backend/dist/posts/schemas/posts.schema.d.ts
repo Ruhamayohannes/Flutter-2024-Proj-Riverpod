@@ -23,7 +23,7 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
 import mongoose from "mongoose";
-import { User } from "src/user/schemas/user.schema";
+import { User } from '../../user/schemas/user.schema';
 export declare class Posts {
     name: string;
     description: string;

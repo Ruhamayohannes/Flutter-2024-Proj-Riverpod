@@ -20,9 +20,17 @@ let PostsService = class PostsService {
     constructor(postsModel) {
         this.postsModel = postsModel;
     }
-    async createPosts(posts, user) {
-        const newPosts = await new this.postsModel(posts);
-        return newPosts.save();
+    async createPosts(createPostsDto, user) {
+        try {
+            const newPosts = new this.postsModel({
+                ...createPostsDto,
+                user: user,
+            });
+            return await newPosts.save();
+        }
+        catch (error) {
+            throw new Error('Failed to create post: ' + error.message);
+        }
     }
     async readPosts() {
         return this.postsModel.find({})

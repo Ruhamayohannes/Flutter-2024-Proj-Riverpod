@@ -6,6 +6,7 @@ import { User } from 'src/user/schemas/user.schema';
 import { extname, join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
+import { CreatePostsDto } from './dto/create-posts.dto';
 
 
 export interface MulterFile {
@@ -27,9 +28,17 @@ export class PostsService {
   ) { }
 
   //creating a posts
-  async createPosts(posts: Posts, user: User): Promise<Posts> {
-    const newPosts = await new this.postsModel(posts)
-    return newPosts.save()
+  async createPosts(createPostsDto: CreatePostsDto, user: User): Promise<Posts> {
+    try {
+      const newPosts = new this.postsModel({
+        ...createPostsDto,
+        user: user,
+      });
+      return await newPosts.save();
+    } catch (error) {
+      // Handle the error appropriately
+      throw new Error('Failed to create post: ' + error.message);
+    }
   }
 
 

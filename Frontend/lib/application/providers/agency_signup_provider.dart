@@ -1,33 +1,39 @@
+import 'dart:convert';
+
 import 'package:Sebawi/application/providers/admin_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
+
 
 final agencySignupProvider =
     ChangeNotifierProvider((ref) => AgencySignupNotifier());
 
 class AgencySignupNotifier extends ChangeNotifier {
-  final TextEditingController agnecyNameController = TextEditingController();
+  final TextEditingController agencyNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
-  String? agnecyNameError;
+  String? agencyNameError;
   String? emailError;
   String? usernameError;
   String? passwordError;
   String? confirmPasswordError;
   String? _password;
-  String? _agnecyName;
+  String? _agencyName;
+  String? _role;
+  String? signupError;
 
-  void setAgnecyName(String value) {
-    _agnecyName = value;
+  void setagencyName(String value) {
+    _agencyName = value;
     if (value.isEmpty) {
-      agnecyNameError = 'Please enter your agnecy name';
+      agencyNameError = 'Please enter your agency name';
     } else {
-      agnecyNameError = null;
+      agencyNameError = null;
     }
     notifyListeners();
   }
@@ -76,32 +82,74 @@ class AgencySignupNotifier extends ChangeNotifier {
   }
 
   bool validateForm() {
-    setAgnecyName(agnecyNameController.text);
+    setagencyName(agencyNameController.text);
     setEmail(emailController.text);
     setUsername(usernameController.text);
     setPassword(passwordController.text);
     setConfirmPassword(confirmPasswordController.text);
 
-    return agnecyNameError == null &&
+    return agencyNameError == null &&
         emailError == null &&
         usernameError == null &&
         passwordError == null &&
         confirmPasswordError == null;
   }
 
-  Future<void> signUp(BuildContext context) async {
+    Future<void> signUp(BuildContext context) async {
     if (validateForm()) {
-      print('Signup successful');
-      context.go('/agency_home');
+      final responseMessage = await signUpApi(
+        agencyNameController.text,
+        emailController.text,
+        usernameController.text,
+        passwordController.text,
+      );
+
+      if (responseMessage == null) {
+        // Sign up successful
+        context.go('/agency_home'); // Navigate to user home
+      } else {
+        // Sign up failed, set error message
+        signupError = responseMessage;
+        notifyListeners();
+      }
     } else {
-      print('Validation failed');
       notifyListeners();
+    }
+  }
+
+  Future<String?> signUpApi(String agencyName, String email, String username,
+      String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://192.168.229.141:3000/auth/signup'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'name': agencyName,
+          "username": username,
+          'email': email,
+          'password': password,
+          'role': 'agency',
+        }),
+      );
+      
+      if (response.statusCode == 201) {
+        print("success");
+        return null; // Sign up successful
+      } else {
+        print(response.statusCode);
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        return responseBody['message'] ?? 'Failed to sign up';
+      }
+    } catch (e) {
+      return 'Failed to connect to server'; // Handle connection error
     }
   }
 
   @override
   void dispose() {
-    agnecyNameController.dispose();
+    agencyNameController.dispose();
     emailController.dispose();
     usernameController.dispose();
     passwordController.dispose();

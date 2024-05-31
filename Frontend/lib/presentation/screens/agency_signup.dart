@@ -59,7 +59,7 @@ class AgencySignup extends ConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 35),
                   child: TextFormField(
-                    controller: signupNotifier.agnecyNameController,
+                    controller: signupNotifier.agencyNameController,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.only(bottom: 4.0),
                       focusedBorder: UnderlineInputBorder(
@@ -80,9 +80,9 @@ class AgencySignup extends ConsumerWidget {
                         fontWeight: FontWeight.w600,
                       ),
                       labelText: 'Agency name',
-                      errorText: signupNotifier.agnecyNameError,
+                      errorText: signupNotifier.agencyNameError,
                     ),
-                    onChanged: (value) => signupNotifier.setAgnecyName(value),
+                    onChanged: (value) => signupNotifier.setagencyName(value),
                   ),
                 ),
                 SizedBox(height: 10.0),
@@ -211,9 +211,19 @@ class AgencySignup extends ConsumerWidget {
                 const SizedBox(height: 40.0),
                 CustomButton(
                     buttonText: 'Signup',
-                    buttonColor: const Color.fromARGB(255, 83, 171, 71),
+                    buttonColor: Colors.green.shade800,
                     buttonTextColor: Colors.white,
                     buttonAction: () => signupNotifier.signUp(context)),
+                if (signupNotifier.signupError != null)
+                  Padding(
+                    padding: const EdgeInsets.all(17),
+                    child: Center(
+                      child: Text(
+                        signupNotifier.signupError!,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ),
                 Padding(
                   padding: const EdgeInsets.all(17),
                   child: Center(
