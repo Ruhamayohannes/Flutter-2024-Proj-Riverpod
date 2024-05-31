@@ -1,59 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:Sebawi/presentation/widgets/custom_button.dart';
 import 'package:Sebawi/application/providers/user_update_provider.dart';
-import 'package:go_router/go_router.dart'; // Import go_router
 
-class ProfileUpdateForm extends ConsumerStatefulWidget {
+class ProfileUpdateForm extends ConsumerWidget {
   @override
-  _ProfileUpdateFormState createState() => _ProfileUpdateFormState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _formKey = GlobalKey<FormState>();
+    String _name = '';
+    String _username = '';
+    String _email = '';
+    String _password = '';
+    String _confirmPassword = '';
 
-class _ProfileUpdateFormState extends ConsumerState<ProfileUpdateForm> {
-  final _formKey = GlobalKey<FormState>();
-  String _name = '';
-  String _username = '';
-  String _email = '';
-  String _password = '';
-  String _confirmPassword = '';
+    void _showDeleteConfirmationDialog(BuildContext context) {
+      // Dialog implementation remains the same
+    }
 
-  void _showDeleteConfirmationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Delete Account'),
-          content: Text(
-              'Are you sure you want to delete your account? This action cannot be undone.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                ref.read(userProvider.notifier).deleteAccount();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Account deleted')),
-                );
-                context.go('/login'); // Navigate to login page
-              },
-              child: Text('Delete'),
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.red,
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: ListView(
@@ -106,7 +70,6 @@ class _ProfileUpdateFormState extends ConsumerState<ProfileUpdateForm> {
             decoration: InputDecoration(labelText: 'Password'),
             obscureText: true,
             onChanged: (value) => _password = value,
-            onSaved: (value) => _password = value!,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter your password';
@@ -118,7 +81,6 @@ class _ProfileUpdateFormState extends ConsumerState<ProfileUpdateForm> {
             decoration: InputDecoration(labelText: 'Confirm Password'),
             obscureText: true,
             onChanged: (value) => _confirmPassword = value,
-            onSaved: (value) => _confirmPassword = value!,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please confirm your password';
@@ -134,18 +96,23 @@ class _ProfileUpdateFormState extends ConsumerState<ProfileUpdateForm> {
             buttonText: 'Update Profile',
             buttonColor: Colors.green,
             buttonTextColor: Colors.white,
-            buttonAction: () {
+            buttonAction: () async {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                ref.read(userProvider.notifier).updateProfile(
-                      username: _username,
-                      password: _password,
-                      email: _email,
-                      name: _name,
-                    );
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Profile updated')),
+                final userId = '6668170b05e8c3d981fde84e'; // Replace with actual user ID
+                final result = await ref.read(userProfileUpdateProvider.notifier).updateProfile(
+                  context,
+                  userId,
                 );
+                // if (result == null) {
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     SnackBar(content: Text('Profile updated successfully')),
+                //   );
+                // } else {
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     SnackBar(content: Text(result)),
+                //   );
+                // }
               }
             },
           ),

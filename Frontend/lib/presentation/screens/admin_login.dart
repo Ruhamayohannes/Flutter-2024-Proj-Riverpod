@@ -10,32 +10,10 @@ class AdminLoginPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextEditingController _usernameController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
+    final adminLoginNotifier = ref.watch(adminLoginProvider);
 
-    void _login() {
-      final username = _usernameController.text;
-      final password = _passwordController.text;
-      ref.read(loginProvider.notifier).login(username, password);
-      if (ref.read(loginProvider)) {
-        context.go('/admin_page');
-      } else {
-        showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text('Login Failed'),
-            content: const Text('Invalid username or password.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Close'),
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      }
+    void _login() async {
+      await ref.read(adminLoginProvider).login(context);
     }
 
     return Scaffold(
@@ -52,29 +30,40 @@ class AdminLoginPage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextField(
-                controller: _usernameController,
-                decoration: const InputDecoration(
+                controller: adminLoginNotifier.usernameController,
+                decoration: InputDecoration(
                   labelText: 'Username',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person),
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.person),
+                  errorText: adminLoginNotifier.usernameError,
                 ),
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: _passwordController,
+                controller: adminLoginNotifier.passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Password',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.lock),
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.lock),
+                  errorText: adminLoginNotifier.passwordError,
                 ),
               ),
               const SizedBox(height: 40),
               CustomButton(
-                  buttonText: 'Login',
-                  buttonColor: Colors.green.shade800,
-                  buttonTextColor: Colors.white,
-                  buttonAction: _login)
+                buttonText: 'Login',
+                buttonColor: Colors.green.shade800,
+                buttonTextColor: Colors.white,
+                buttonAction: _login,
+              ),
+              if (adminLoginNotifier.loginError != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    adminLoginNotifier.loginError!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
             ],
           ),
         ),

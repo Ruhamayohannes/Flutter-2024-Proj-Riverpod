@@ -1,28 +1,26 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class AuthService {
   final String baseUrl;
 
   AuthService({required this.baseUrl});
 
-  Future<String> login(String username, String password) async {
+  Future<Map<String, dynamic>> login(String username, String password) async {
     final response = await http.get(
       Uri.parse('$baseUrl/auth/login?username=$username&password=$password'),
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
     );
 
     if (response.statusCode == 200) {
-      final responseBody = json.decode(response.body);
-      if (responseBody.containsKey('token')) {
-        return responseBody['token'];
-      } else {
-        throw Exception('Token not found in response');
-      }
+      return jsonDecode(response.body);
+      
     } else {
-      print('Response status code: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      throw Exception('Failed to login: ${response.reasonPhrase}');
+      throw Exception('Failed to login');
     }
   }
 }

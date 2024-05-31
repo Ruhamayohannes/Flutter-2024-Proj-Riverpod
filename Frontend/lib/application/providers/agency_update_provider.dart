@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AgencyUpdateProvider extends ChangeNotifier {
+class AgencyProvider extends ChangeNotifier {
   String _agencyName = '';
   String _agencyEmail = '';
   String _password = '';
@@ -29,4 +29,4 @@ class AgencyUpdateProvider extends ChangeNotifier {
   }
 }
 
-final agencyUpdateProvider = ChangeNotifierProvider((ref) => AgencyUpdateProvider());
+final agencyProvider = ChangeNotifierProvider((ref) => AgencyProvider());

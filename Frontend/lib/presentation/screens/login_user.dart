@@ -25,8 +25,8 @@ class LoginUser extends ConsumerWidget {
                   height: 140.0,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 35),
+              const Padding(
+                padding: EdgeInsets.only(left: 35),
                 child: Text(
                   'Login',
                   style: TextStyle(
@@ -36,9 +36,9 @@ class LoginUser extends ConsumerWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 2.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 35.0),
+              const SizedBox(height: 2.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 35.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -53,7 +53,7 @@ class LoginUser extends ConsumerWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 35)
                     .copyWith(bottom: 10),
@@ -61,21 +61,21 @@ class LoginUser extends ConsumerWidget {
                   controller: loginNotifier.usernameController,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(bottom: 4.0),
-                    focusedBorder: UnderlineInputBorder(
+                    focusedBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Color.fromARGB(255, 31, 78, 33),
                         style: BorderStyle.solid,
                         width: 2,
                       ),
                     ),
-                    enabledBorder: UnderlineInputBorder(
+                    enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Color.fromRGBO(213, 213, 213, 1),
                       ),
                     ),
                     labelText: 'Username',
                     errorText: loginNotifier.usernameError,
-                    labelStyle: TextStyle(
+                    labelStyle: const TextStyle(
                       color: Color.fromARGB(255, 165, 165, 165),
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -84,26 +84,26 @@ class LoginUser extends ConsumerWidget {
                   onChanged: loginNotifier.setUsername,
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 35),
                 child: TextField(
                   controller: loginNotifier.passwordController,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(bottom: 4.0),
-                    focusedBorder: UnderlineInputBorder(
+                    contentPadding: const EdgeInsets.only(bottom: 4.0),
+                    focusedBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Color.fromARGB(255, 31, 78, 33),
                         style: BorderStyle.solid,
                         width: 2,
                       ),
                     ),
-                    enabledBorder: UnderlineInputBorder(
+                    enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Color.fromRGBO(213, 213, 213, 1),
                       ),
                     ),
-                    labelStyle: TextStyle(
+                    labelStyle: const TextStyle(
                       color: Color.fromARGB(255, 165, 165, 165),
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -115,7 +115,7 @@ class LoginUser extends ConsumerWidget {
                   onChanged: loginNotifier.setPassword,
                 ),
               ),
-              SizedBox(height: 40.0),
+              const SizedBox(height: 40.0),
               CustomButton(
                 buttonAction: () => loginNotifier.login(context),
                 buttonText: 'Login',

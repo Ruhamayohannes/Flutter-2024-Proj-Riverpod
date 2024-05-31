@@ -1,20 +1,20 @@
 import 'package:Sebawi/application/providers/agency_provider.dart';
+import 'package:Sebawi/application/providers/posts_form_provider.dart';
+import 'package:Sebawi/data/models/posts_model.dart';
 import 'package:Sebawi/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../application/providers/myPosts_provider.dart';
+import '../../application/providers/posts_provider.dart';
 
 class AgencyHomePage extends ConsumerWidget {
   const AgencyHomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final agencyNotifier = ref.watch(agencyProvider.notifier);
-    final posts = ref.watch(agencyProvider).posts;
-
-    
-    final myPosts =
-        posts.where((post) => post.agencyName == "Mekedonia").toList();
+    final asyncPosts = ref.watch(postsProvider);
 
     return DefaultTabController(
       length: 3,
@@ -47,9 +47,17 @@ class AgencyHomePage extends ConsumerWidget {
                 ),
               ),
             ],
+            onTap: (index) {
+              if (index == 0) {
+                // Assuming the calendar tab is the first one
+                ref.read(postsProvider.notifier).refresh();
+              } else if (index == 1) {
+                ref.read(myPostsProvider.notifier).refresh();
+              }
+            },
             labelColor: const Color.fromARGB(255, 255, 255, 255),
             unselectedLabelColor: const Color.fromARGB(255, 255, 255, 255),
-            indicatorColor: Color.fromARGB(255, 147, 176, 149),
+            indicatorColor: const Color.fromARGB(255, 147, 176, 149),
           ),
           title: Padding(
             padding: const EdgeInsets.only(top: 16.0, left: 8.0),
@@ -72,7 +80,7 @@ class AgencyHomePage extends ConsumerWidget {
                 },
                 itemBuilder: (BuildContext context) {
                   return [
-                    PopupMenuItem<String>(
+                    const PopupMenuItem<String>(
                       value: 'update_profile',
                       child: Row(
                         children: [
@@ -82,7 +90,7 @@ class AgencyHomePage extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    PopupMenuItem<String>(
+                    const PopupMenuItem<String>(
                       value: 'logout',
                       child: Row(
                         children: [
@@ -94,136 +102,161 @@ class AgencyHomePage extends ConsumerWidget {
                     ),
                   ];
                 },
-                icon: Icon(Icons.settings),
-                color: Color.fromARGB(255, 124, 181, 127),
+                icon: const Icon(Icons.settings),
+                color: const Color.fromARGB(255, 124, 181, 127),
                 iconSize: 27,
               ),
             )
           ],
         ),
         body: TabBarView(
-          children: [
-            ListView.builder(
-              itemCount: posts.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    PostItem(
-                      post: posts[index],
-                      isMyPost: true,
-                      onDelete: () {
-                        agencyNotifier.deletePost(index);
-                      },
-                    ),
-                    Divider(
-                      height: 10,
-                      thickness: 1,
-                      color: Colors.grey.shade200,
-                    ),
-                  ],
-                );
-              },
+              children: [
+                Consumer(builder: (context, ref, child) {
+                  final asyncPosts = ref.watch(postsProvider);
+                  return asyncPosts.when(
+                    data: (posts) =>
+                        ListView.builder(
+                          itemCount: posts?.length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                PostItem(
+                                  post: posts![index],
+                                  isMyPost: false,
+                                  onDelete: () {
+                                    // No action for delete in "All Posts"
+                                  },
+                                ),
+                                Divider(
+                                  height: 10,
+                                  thickness: 1,
+                                  color: Colors.grey.shade200,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                    loading: () =>
+                    const Center(child: CircularProgressIndicator()),
+                    error: (err, stack) =>
+                    const Center(child: Text("Error loading posts")),
+                  );
+                },
+                ),
+                Consumer( builder: (context, ref, child){
+                  final asyncMyCalendars = ref.watch(myPostsProvider);
+                  return asyncMyCalendars.when(
+                    data:(myPosts) =>
+                ListView.builder(
+                  itemCount: myPosts?.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        PostItem(
+                          post: myPosts![index],
+                          isMyPost: true,
+                          onDelete: () {
+                            // Add your delete logic here
+                          },
+                        ),
+                        Divider(
+                          height: 10,
+                          thickness: 1,
+                          color: Colors.grey.shade200,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                    loading: () =>
+                    const Center(child: CircularProgressIndicator()),
+                    error: (err, stack) =>
+                    const Center(child: Text("Error loading Calendar")),
+                  );
+                },
+                ),
+                const AddPostForm(),
+              ],
             ),
-            ListView.builder(
-              itemCount: myPosts.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    PostItem(
-                      post: myPosts[index],
-                      isMyPost: true,
-                      onDelete: () {
-                        agencyNotifier.deletePost(index);
-                      },
-                    ),
-                    Divider(
-                      height: 10,
-                      thickness: 1,
-                      color: Colors.grey.shade200,
-                    ),
-                  ],
-                );
-              },
-            ),
-            AddPostForm(),
-          ],
+
         ),
-      ),
-    );
+      );
   }
 }
 
-class AddPostForm extends ConsumerStatefulWidget {
-  const AddPostForm({super.key});
+class AddPostForm extends ConsumerWidget {
+  const AddPostForm({Key? key}) : super(key: key);
 
   @override
-  _AddPostFormState createState() => _AddPostFormState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formState = ref.watch(postFormProvider);
+    final formNotifier = ref.read(postFormProvider.notifier);
+    final agencyNotifier = ref.read(agencyProvider);
 
-class _AddPostFormState extends ConsumerState<AddPostForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _contactController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
-        key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-              controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: const InputDecoration(labelText: 'Name'),
+              onChanged: (value) => formNotifier.updateName(value),
               validator: (value) {
-                if (value == null || value.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Please enter a name';
                 }
                 return null;
               },
             ),
             TextFormField(
-              controller: _descriptionController,
-              decoration: InputDecoration(labelText: 'Description'),
+              decoration: const InputDecoration(labelText: 'Description'),
+              onChanged: (value) => formNotifier.updateDescription(value),
               validator: (value) {
-                if (value == null || value.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Please enter a description';
                 }
                 return null;
               },
             ),
             TextFormField(
-              controller: _contactController,
-              decoration: InputDecoration(labelText: 'Contact'),
+              decoration: const InputDecoration(labelText: 'Contact'),
+              onChanged: (value) => formNotifier.updateContact(value),
               validator: (value) {
-                if (value == null || value.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Please enter your contact';
                 }
                 return null;
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             CustomButton(
               buttonText: 'Post',
-              buttonColor: Color.fromARGB(255, 255, 255, 255),
+              buttonColor: const Color.fromARGB(255, 255, 255, 255),
               buttonTextColor: const Color.fromARGB(255, 33, 94, 35),
-              buttonAction: () {
-                if (_formKey.currentState!.validate()) {
-                  final newPost = Post(
-                    agencyName:
-                        "Mekedonia", // Example for current user's agency
-                    contactInfo: _contactController.text,
-                    serviceType: _descriptionController.text,
-                  );
-                  ref.read(agencyProvider.notifier).addPost(newPost);
-                  _nameController.clear();
-                  _descriptionController.clear();
-                  _contactController.clear();
-                }
-              },
+              buttonAction:
+                   () async {
+                      final newPost = Post(
+                        name: formState.name,
+                        contact: formState.contact,
+                        description: formState.description
+                      );
+                      try {
+                        await agencyNotifier.addPost(newPost);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Post Created!"),
+                            duration: Duration(milliseconds: 1000),
+                          ),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content:
+                                  Text('Failed to add post: ${e.toString()}')),
+                        );
+                      }
+                    }
             ),
           ],
         ),
@@ -257,14 +290,14 @@ class PostItem extends StatelessWidget {
             colors: [
               Colors.grey.shade200,
               Colors.grey.shade100,
-            ], // You can adjust these colors as needed
+            ],
           ),
         ),
         child: ListTile(
           title: Padding(
             padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: Text(
-              post.agencyName,
+              post.name,
               style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
@@ -282,7 +315,7 @@ class PostItem extends StatelessWidget {
                     " Contact: ",
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
-                  Text(post.contactInfo),
+                  Text(post.contact),
                 ],
               ),
               Row(
@@ -296,15 +329,15 @@ class PostItem extends StatelessWidget {
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Text(post.serviceType),
+                  Text(post.description),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (isMyPost) ...[
+              if (isMyPost)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
                       IconButton(
                         icon: Icon(
                           Icons.edit,
@@ -322,9 +355,8 @@ class PostItem extends StatelessWidget {
                         onPressed: onDelete,
                       ),
                     ],
-                  ],
+                  ),
                 ),
-              ),
             ],
           ),
         ),
@@ -339,7 +371,7 @@ class PostItem extends StatelessWidget {
             'Edit Post',
             style: TextStyle(fontWeight: FontWeight.w900),
           ),
-          content: Column(
+          content: const Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
@@ -366,8 +398,8 @@ class PostItem extends StatelessWidget {
             TextButton(
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all(Colors.redAccent.shade700),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    WidgetStateProperty.all(Colors.redAccent.shade700),
+                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20), // Border radius
                   ),
@@ -385,8 +417,8 @@ class PostItem extends StatelessWidget {
             TextButton(
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all(Colors.green.shade800),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    WidgetStateProperty.all(Colors.green.shade800),
+                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20), // Border radius
                   ),

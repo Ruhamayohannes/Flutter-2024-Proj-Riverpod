@@ -1,14 +1,17 @@
+import 'package:Sebawi/application/providers/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../data/models/posts.dart';
 import '../../application/providers/posts_provider.dart';
+import '../../data/models/calendars.dart';
+import '../../data/models/posts_model.dart';
+import '../../application/providers/calendar_provider.dart';
 
-class UserHomePage extends StatelessWidget {
+class UserHomePage extends ConsumerWidget {
   const UserHomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
@@ -36,7 +39,7 @@ class UserHomePage extends StatelessWidget {
                   },
                   itemBuilder: (BuildContext context) {
                     return [
-                      PopupMenuItem<String>(
+                      const PopupMenuItem<String>(
                         value: 'update_profile',
                         child: Row(
                           children: [
@@ -46,7 +49,7 @@ class UserHomePage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      PopupMenuItem<String>(
+                      const PopupMenuItem<String>(
                         value: 'logout',
                         child: Row(
                           children: [
@@ -58,8 +61,8 @@ class UserHomePage extends StatelessWidget {
                       ),
                     ];
                   },
-                  icon: Icon(Icons.settings),
-                  color: Color.fromARGB(255, 124, 181, 127),
+                  icon: const Icon(Icons.settings),
+                  color: const Color.fromARGB(255, 124, 181, 127),
                   iconSize: 27,
                 ),
               )
@@ -79,6 +82,14 @@ class UserHomePage extends StatelessWidget {
                   ),
                 ),
               ],
+              onTap: (index) {
+                if (index == 1) {
+                  // Assuming the calendar tab is the first one
+                  ref.read(calendarsProvider.notifier).refresh();
+                } else if (index == 0) {
+                  ref.read(postsProvider.notifier).refresh();
+                }
+              },
               labelColor: Colors.green.shade800,
               unselectedLabelColor: Colors.grey.shade800,
               indicatorColor: Colors.green.shade800,
@@ -89,15 +100,14 @@ class UserHomePage extends StatelessWidget {
               Consumer(
                 builder: (context, ref, child) {
                   final asyncPosts = ref.watch(postsProvider);
-
                   return asyncPosts.when(
                     data: (posts) => ListView.builder(
-                      itemCount: posts.length,
+                      itemCount: posts?.length,
                       itemBuilder: (context, index) {
                         return Column(
                           children: [
                             PostItem(
-                              post: posts[index],
+                              post: posts![index],
                               isMyPost: true,
                             ),
                             Divider(
@@ -116,20 +126,31 @@ class UserHomePage extends StatelessWidget {
                   );
                 },
               ),
-              ListView.builder(
-                itemCount: calendar.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      ListTile(
-                        title: Text(calendar[index]),
-                      ),
-                      Divider(
-                        height: 10,
-                        thickness: 1,
-                        color: Colors.grey.shade200,
-                      ),
-                    ],
+              Consumer(
+                builder: (context, ref, child) {
+                  final asyncCalendars = ref.watch(calendarsProvider);
+                  return asyncCalendars.when(
+                    data: (calendars) => ListView.builder(
+                      itemCount: calendars?.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            CalendarItem(
+                              calendar: calendars![index],
+                            ),
+                            Divider(
+                              height: 10,
+                              thickness: 1,
+                              color: Colors.grey.shade200,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
+                    error: (err, stack) =>
+                        const Center(child: Text("Error loading Calendar")),
                   );
                 },
               ),
@@ -144,21 +165,12 @@ class UserHomePage extends StatelessWidget {
   }
 }
 
-List<String> calendar = [];
-
-class PostItem extends StatefulWidget {
-  final Post post;
-  final bool isMyPost;
-  PostItem({required this.post, required this.isMyPost, super.key});
+class CalendarItem extends ConsumerWidget {
+  final Calendar calendar;
+  const CalendarItem({required this.calendar, super.key});
 
   @override
-  PostItemState createState() => PostItemState();
-  final TextEditingController _dateController = TextEditingController();
-}
-
-class PostItemState extends State<PostItem> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       child: Container(
@@ -168,19 +180,143 @@ class PostItemState extends State<PostItem> {
             end: Alignment.bottomRight,
             colors: [
               Colors.grey.shade200,
-              Colors.grey.shade100
-            ], // You can adjust these colors as needed
+              Colors.grey.shade100,
+            ],
+          ),
+        ),
+        child: ListTile(
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${calendar.name[0].toUpperCase()}${calendar.name.substring(1).toLowerCase()}",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.green.shade800,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.medical_services,
+                        size: 14, color: Colors.green.shade800),
+                    const Center(
+                      child: Text(
+                        " Service Type: ",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Text(calendar.description),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('Scheduled to ${calendar.date}'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            leading: const Icon(
+              Icons.calendar_today,
+              size: 40,
+              color: Colors.green,
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    ref
+                        .read(homeProvider.notifier)
+                        .deleteCalendar(calendar.id!);
+                    ref.read(calendarsProvider.notifier).refresh();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Calendar Entry Deleted"),
+                        duration: Duration(milliseconds: 1000),
+                      ),
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {
+                    showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(DateTime.now().year + 1),
+                    ).then((pickedDate) {
+                      if (pickedDate != null) {
+                        ref.read(homeProvider.notifier).updateCalendar(
+                            pickedDate.toString().split(" ")[0], calendar.id!);
+                        ref.read(calendarsProvider.notifier).refresh();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Calendar event updated to",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  pickedDate.toString().split(" ")[0],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                            duration: const Duration(milliseconds: 1000),
+                          ),
+                        );
+                      }
+                    });
+                  },
+                ),
+              ],
+            )),
+      ),
+    );
+  }
+}
+
+class PostItem extends ConsumerWidget {
+  final Post post;
+  final bool isMyPost;
+  const PostItem({required this.post, required this.isMyPost, super.key});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final homeNotifier = ref.read(homeProvider);
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.grey.shade200,
+              Colors.grey.shade100,
+            ],
           ),
         ),
         child: ListTile(
           title: Padding(
             padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: Text(
-              widget.post.name,
+              post.name,
               style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.green.shade800),
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: Colors.green.shade800,
+              ),
             ),
           ),
           subtitle: Column(
@@ -194,7 +330,7 @@ class PostItemState extends State<PostItem> {
                     " Contact: ",
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
-                  Text(widget.post.contact),
+                  Text(post.contact),
                 ],
               ),
               Row(
@@ -208,7 +344,7 @@ class PostItemState extends State<PostItem> {
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Text(widget.post.description),
+                  Text(post.description),
                 ],
               ),
               Padding(
@@ -216,38 +352,15 @@ class PostItemState extends State<PostItem> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (widget.isMyPost) ...[
+                    if (isMyPost) ...[
                       TextButton(
                         style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.all(Colors.green.shade800),
+                              WidgetStateProperty.all(Colors.green.shade800),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(20), // Border radius
-                            ),
-                          ),
-                        ),
-                        child: const Text(
-                          'Volunteer Now',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
-                        onPressed: () {
-                          // Implement your logic here
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                      TextButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.green.shade800),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(20), // Border radius
+                              borderRadius: BorderRadius.circular(20),
                             ),
                           ),
                         ),
@@ -257,7 +370,39 @@ class PostItemState extends State<PostItem> {
                               fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                         onPressed: () {
-                          _selectDate();
+                          showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(DateTime.now().year + 1),
+                          ).then((pickedDate) {
+                            if (pickedDate != null) {
+                              homeNotifier.addToCalendar(
+                                pickedDate.toString().split(" ")[0],
+                                post.id.toString(),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Calendar event added for ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        pickedDate.toString().split(" ")[0],
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                  duration: const Duration(milliseconds: 1000),
+                                ),
+                              );
+                            }
+                          });
                         },
                       ),
                     ],
@@ -269,30 +414,5 @@ class PostItemState extends State<PostItem> {
         ),
       ),
     );
-  }
-
-  Future<void> _selectDate() async {
-    DateTime? picked = await showDatePicker(
-        context: context,
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100),
-        initialDate: DateTime.now());
-    if (picked != null) {
-      setState(() {
-        widget._dateController.text = picked.toString().split(" ")[0];
-        calendar.add(picked.toString().split(" ")[0]);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-                "Date selected for ${widget.post.name}: ${widget._dateController.text}"),
-            action: SnackBarAction(
-              label: 'OK',
-              onPressed: () {},
-            ),
-            duration: const Duration(seconds: 5),
-          ),
-        );
-      });
-    }
   }
 }

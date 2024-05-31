@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import '../../data/services/api_path.dart';  // Update this import to match the actual path
 
 final volunteerSignupProvider =
     ChangeNotifierProvider((ref) => VolunteerSignupNotifier());
@@ -23,7 +22,9 @@ class VolunteerSignupNotifier extends ChangeNotifier {
   String? _password;
   String? _fullName;
   String? _role;
-  String? signupError; 
+  String? signupError;
+
+  final RemoteService _remoteService = RemoteService();
 
   void setFullName(String value) {
     _fullName = value;
@@ -98,11 +99,12 @@ class VolunteerSignupNotifier extends ChangeNotifier {
 
   Future<void> signUp(BuildContext context) async {
     if (validateForm()) {
-      final responseMessage = await signUpApi(
+      final responseMessage = await _remoteService.signUp(
         fullNameController.text,
         emailController.text,
         usernameController.text,
         passwordController.text,
+        'user',  // Assuming the role is 'user'
       );
 
       if (responseMessage == null) {
@@ -115,36 +117,6 @@ class VolunteerSignupNotifier extends ChangeNotifier {
       }
     } else {
       notifyListeners();
-    }
-  }
-
-  Future<String?> signUpApi(String fullName, String email, String username,
-      String password) async {
-    try {
-      final response = await http.post(
-        Uri.parse('http://192.168.229.141:3000/auth/signup'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'name': fullName,
-          "username": username,
-          'email': email,
-          'password': password,
-          'role': 'user',
-        }),
-      );
-      
-      if (response.statusCode == 201) {
-        print("success");
-        return null; // Sign up successful
-      } else {
-        print(response.statusCode);
-        final Map<String, dynamic> responseBody = jsonDecode(response.body);
-        return responseBody['message'] ?? 'Failed to sign up';
-      }
-    } catch (e) {
-      return 'Failed to connect to server'; // Handle connection error
     }
   }
 
