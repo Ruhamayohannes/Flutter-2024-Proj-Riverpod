@@ -52,10 +52,17 @@ class LoginNotifier extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       // Successful login
-      // Handle token or other response data
-      print('Login successful');
-      // Navigate to the next screen, e.g., user home
-      context.go('/user_home');
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      final status = responseBody['status'];
+
+      // Navigate to the next screen based on the user's status
+      if (status == 'user') {
+        context.go('/user_home');
+      } else if (status == 'agency') {
+        context.go('/agency_home');
+      } else {
+        // Handle other statuses
+      }
     } else {
       // Failed login
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
