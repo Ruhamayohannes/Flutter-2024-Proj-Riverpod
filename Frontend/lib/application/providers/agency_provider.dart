@@ -14,15 +14,11 @@ class AgencyProvider extends ChangeNotifier {
   List<Post> get posts => _posts;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
-
-  Future<void> addPost(Post post) async {
+Future<void> addPost(Post post) async {
     _isLoading = true;
     notifyListeners();
     SharedPreferenceService sharedPrefService = SharedPreferenceService();
     String? userId = await sharedPrefService.readCache(key: "uId");
-    if (userId == null) {
-      return;
-    }
     Post updatedPost = Post(
       name: post.name,
       description: post.description,
